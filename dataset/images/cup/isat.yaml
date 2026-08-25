@@ -1,0 +1,11 @@
+label:
+- color: '#000000'
+  name: __background__
+- color: '#aa5500'
+  name: mouse
+- color: '#00aaff'
+  name: laptop
+- color: '#00aa7f'
+  name: cup
+- color: '#ff5500'
+  name: phone
