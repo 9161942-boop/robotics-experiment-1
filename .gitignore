@@ -1,0 +1,19 @@
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Temporary extraction/test output
+_frame_extract_test*/
+*.tmp
+
+# Training outputs and large generated artifacts
+runs/
+weights/
+*.pt
+*.onnx
+*.engine
+
+# Raw source videos are kept locally and documented separately.
+video/
