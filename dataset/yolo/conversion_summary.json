@@ -38,7 +38,28 @@
         "phone:phone_2",
         "phone:phone_3",
         "phone:phone_4"
-      ]
+      ],
+      "images_by_source_group": {
+        "cup:cup_1": 21,
+        "cup:cup_2_extra": 34,
+        "cup:cup_2_original": 16,
+        "cup:cup_3_extra": 44,
+        "cup:cup_3_original": 14,
+        "cup:cup_4_extra": 49,
+        "cup:cup_4_original": 5,
+        "laptop:laptop_1": 24,
+        "laptop:laptop_2": 29,
+        "laptop:laptop_3": 22,
+        "laptop:laptop_4": 10,
+        "mouse:mouse_1": 18,
+        "mouse:mouse_2": 17,
+        "mouse:mouse_3": 18,
+        "mouse:mouse_4": 18,
+        "phone:phone_1": 18,
+        "phone:phone_2": 25,
+        "phone:phone_3": 4,
+        "phone:phone_4": 35
+      }
     },
     "val": {
       "images": 87,
@@ -69,7 +90,28 @@
         "phone:phone_2",
         "phone:phone_3",
         "phone:phone_4"
-      ]
+      ],
+      "images_by_source_group": {
+        "cup:cup_1": 4,
+        "cup:cup_2_extra": 7,
+        "cup:cup_2_original": 3,
+        "cup:cup_3_extra": 9,
+        "cup:cup_3_original": 3,
+        "cup:cup_4_extra": 10,
+        "cup:cup_4_original": 1,
+        "laptop:laptop_1": 5,
+        "laptop:laptop_2": 6,
+        "laptop:laptop_3": 4,
+        "laptop:laptop_4": 2,
+        "mouse:mouse_1": 4,
+        "mouse:mouse_2": 4,
+        "mouse:mouse_3": 4,
+        "mouse:mouse_4": 4,
+        "phone:phone_1": 4,
+        "phone:phone_2": 5,
+        "phone:phone_3": 1,
+        "phone:phone_4": 7
+      }
     },
     "test": {
       "images": 87,
@@ -100,7 +142,28 @@
         "phone:phone_2",
         "phone:phone_3",
         "phone:phone_4"
-      ]
+      ],
+      "images_by_source_group": {
+        "cup:cup_1": 4,
+        "cup:cup_2_extra": 7,
+        "cup:cup_2_original": 3,
+        "cup:cup_3_extra": 9,
+        "cup:cup_3_original": 3,
+        "cup:cup_4_extra": 10,
+        "cup:cup_4_original": 1,
+        "laptop:laptop_1": 5,
+        "laptop:laptop_2": 6,
+        "laptop:laptop_3": 4,
+        "laptop:laptop_4": 2,
+        "mouse:mouse_1": 4,
+        "mouse:mouse_2": 4,
+        "mouse:mouse_3": 4,
+        "mouse:mouse_4": 4,
+        "phone:phone_1": 4,
+        "phone:phone_2": 5,
+        "phone:phone_3": 1,
+        "phone:phone_4": 7
+      }
     }
   }
 }

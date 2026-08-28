@@ -1,0 +1,52 @@
+{
+  "status": "corrected_source_group_baseline",
+  "run": "runs/yolo11n_4class_v2",
+  "model": "yolo11n.pt",
+  "classes": ["mouse", "laptop", "cup", "phone"],
+  "dataset": {
+    "images": 595,
+    "splits": {"train": 421, "val": 87, "test": 87},
+    "objects": {"train": 506, "val": 104, "test": 104},
+    "source_groups_per_split": 19,
+    "split_method": "contiguous_temporal_blocks_within_each_source_group"
+  },
+  "training": {
+    "epochs": 80,
+    "best_epoch": 63,
+    "imgsz": 640,
+    "batch": 16,
+    "device": "0",
+    "workers": 0,
+    "seed": 42,
+    "ultralytics": "8.4.22",
+    "torch": "2.7.1+cu118",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU"
+  },
+  "validation": {
+    "precision": 0.99337,
+    "recall": 0.99405,
+    "mAP50": 0.99064,
+    "mAP50_95": 0.98244,
+    "per_class_final_validation": {
+      "mouse": {"precision": 0.96, "recall": 1.0, "mAP50": 0.992, "mAP50_95": 0.971},
+      "laptop": {"precision": 0.98, "recall": 1.0, "mAP50": 0.995, "mAP50_95": 0.99},
+      "cup": {"precision": 0.992, "recall": 0.976, "mAP50": 0.978, "mAP50_95": 0.973},
+      "phone": {"precision": 0.979, "recall": 1.0, "mAP50": 0.995, "mAP50_95": 0.995}
+    }
+  },
+  "frame_diagnostic_test": {
+    "summary": "results/v2_test_evaluation/summary.json",
+    "confidence": 0.25,
+    "match_iou": 0.5,
+    "nms_iou": 0.7,
+    "images": 87,
+    "ground_truth_objects": 104,
+    "predicted_objects": 104,
+    "correct_objects": 103,
+    "object_accuracy_percent": 99.03846153846153,
+    "false_negative": 1,
+    "false_positive": 1
+  },
+  "checkpoint_sha256": "DFFC9873C1A365013F2F38224A4262F8E94E6657BF640576994DDE0136A1FDFE",
+  "acceptance_note": "This is a frame-level diagnostic. Final course accuracy must use at least 20 independently collected objects not present in training or validation."
+}

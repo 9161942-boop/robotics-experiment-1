@@ -86,3 +86,12 @@
 - PC 基线：Ultralytics 8.4.22、Python 3.13.9、PyTorch 2.7.1+cu118、RTX 4060 Laptop GPU；YOLO11n，640，batch 16，80 epochs，seed 42。验证 mAP50=0.988，mAP50-95=0.981。
 - v1 帧诊断测试（IoU=0.50、置信度=0.25）：96/119 正确，object accuracy=80.67%，precision=80.67%，recall=80.67%；错误案例已保存到 `results/test_evaluation_clean/errors`。由于之后修正了 19 个来源组的划分，v1 只作为过程记录且不能替代 20 个独立物体测试。
 - 首次训练因 Ultralytics 对相对 YAML 路径解析错误停止；`train_yolo.py` 现在启动时切换到项目根目录，`data.yaml` 使用项目内相对路径，已验证训练可完成。
+
+## 2026-08-28 v2 训练与帧级测试
+
+- 使用修正后的 19 个实物/视频来源组重新训练四类 YOLO11n；训练参数为 80 epochs、640 输入、batch 16、seed 42、CUDA:0、workers 0。
+- 训练运行目录：`runs/yolo11n_4class_v2`；最佳 CSV 记录为 epoch 63，precision=0.99337、recall=0.99405、mAP50=0.99064、mAP50-95=0.98244。
+- 最佳权重：`runs/yolo11n_4class_v2/weights/best.pt`；SHA-256=`DFFC9873C1A365013F2F38224A4262F8E94E6657BF640576994DDE0136A1FDFE`。
+- 固定置信度 0.25、匹配 IoU 0.50、NMS IoU 0.70 运行测试：87 张图、104 个标注目标、103 个正确匹配，帧级 object accuracy=99.04%，1 个杯子漏检、1 个鼠标误检。
+- 两张错误图经人工检查：`cup_cup4_000086.jpg` 的原始 JSON 有两个 IoU≈0.993 的同类框，疑似重复标注；`laptop_laptop_000050.jpg` 右侧可见鼠标但 JSON 未标注。两者已记录为标注质量案例，不把帧级结果冒充独立 20 实物准确率。
+- 下一步是采集四类各 5 个、训练中未出现的独立实物，填写 `results/independent_test_template.csv`，再运行同一评测规则；随后在 Jetson 上测量平均/最低 FPS，并接通 ROS2 topic。
