@@ -94,4 +94,4 @@
 - 最佳权重：`runs/yolo11n_4class_v2/weights/best.pt`；SHA-256=`DFFC9873C1A365013F2F38224A4262F8E94E6657BF640576994DDE0136A1FDFE`。
 - 固定置信度 0.25、匹配 IoU 0.50、NMS IoU 0.70 运行测试：87 张图、104 个标注目标、103 个正确匹配，帧级 object accuracy=99.04%，1 个杯子漏检、1 个鼠标误检。
 - 两张错误图经人工检查：`cup_cup4_000086.jpg` 的原始 JSON 有两个 IoU≈0.993 的同类框，疑似重复标注；`laptop_laptop_000050.jpg` 右侧可见鼠标但 JSON 未标注。两者已记录为标注质量案例，不把帧级结果冒充独立 20 实物准确率。
-- 下一步是采集四类各 5 个、训练中未出现的独立实物，填写 `results/independent_test_template.csv`，再运行同一评测规则；随后在 Jetson 上测量平均/最低 FPS，并接通 ROS2 topic。
+- 下一步先把最佳模型部署到 Jetson，完成摄像头实时显示、平均/稳定 FPS 记录和 ROS2 topic 验证；程序稳定后，再用四类各 5 个、共 20 个未参与训练的实物填写 `results/independent_test_template.csv` 并运行同一评测规则。

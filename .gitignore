@@ -17,6 +17,7 @@ weights/
 
 # Raw source videos are kept locally and documented separately.
 video/
+external/coco2017/
 
 # Temporary threshold sweeps; keep the selected clean evaluation instead.
 results/test_sweep_*/
@@ -30,3 +31,4 @@ dataset/yolo/**/*.cache
 # Keep CSV/JSON summaries in Git; select only representative error images.
 results/test_evaluation_clean/errors/
 results/v2_test_evaluation/errors/
+results/coco_external_test/

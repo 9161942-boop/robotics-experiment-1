@@ -31,6 +31,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--nms-iou", type=float, default=0.70)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--device", default="0")
+    parser.add_argument(
+        "--acceptance-note",
+        default="Use at least 20 independently collected objects for the final course accuracy; this split is a frame-level diagnostic.",
+    )
     return parser.parse_args()
 
 
@@ -151,14 +155,33 @@ def main() -> None:
         rows.append({
             "image": Path(result.path).name,
             "ground_truth": len(ground_truth),
+            "ground_truth_classes": ";".join(names[class_id] for class_id, _box in ground_truth),
             "predictions": len(predictions),
+            "prediction_summary": ";".join(
+                f"{names[class_id]}:{confidence:.3f}" for class_id, confidence, _box in predictions
+            ),
             "correct": len(matches),
+            "matched_ious": ";".join(f"{iou:.3f}" for _prediction, _ground_truth, iou in matches),
             "false_negative": len(false_negative_indices),
             "false_positive": len(false_positive_indices),
             "accuracy_percent": round(100 * len(matches) / len(ground_truth), 2) if ground_truth else "",
         })
         if false_negative_indices or false_positive_indices:
-            save_jpeg(error_dir / Path(result.path).name, result.plot())
+            annotated = result.plot()
+            cv2.putText(annotated, "Ground truth: red", (12, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+            for class_id, box in ground_truth:
+                x1, y1, x2, y2 = (int(round(float(value))) for value in box)
+                cv2.rectangle(annotated, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                cv2.putText(
+                    annotated,
+                    f"GT {names[class_id]}",
+                    (x1, max(20, y1 - 8)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.6,
+                    (0, 0, 255),
+                    2,
+                )
+            save_jpeg(error_dir / Path(result.path).name, annotated)
 
     with (args.output / "per_image.csv").open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]) if rows else ["image"])
@@ -183,7 +206,7 @@ def main() -> None:
         "match_iou_threshold": args.match_iou,
         "nms_iou_threshold": args.nms_iou,
         "per_class": {name: dict(counts) for name, counts in sorted(class_totals.items())},
-        "acceptance_note": "Use at least 20 independently collected objects for the final course accuracy; this split is a frame-level diagnostic.",
+        "acceptance_note": args.acceptance_note,
     }
     (args.output / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=2))
