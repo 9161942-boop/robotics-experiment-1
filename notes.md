@@ -61,3 +61,10 @@
 - ROS2 topic/消息类型/`ros2 topic echo` 截图或文本记录
 - 至少 3 个典型错误案例及原因分析
 - 个人 Git commit 记录、运行说明和实验报告
+
+## 2026-08-28 数据扩充
+
+- 新增原始视频：`video/cup/cup_2.mp4`（237 帧）、`video/cup/cup_3.mp4`（185 帧）。
+- 从两个视频各均匀抽取 100 帧，保存为 `dataset/images/cup/cup2_*.jpg` 和 `dataset/images/cup/cup3_*.jpg`。
+- 新增 200 张图片当前尚未标注；标注完成后再纳入 YOLO 转换和训练集划分。
+- `video/` 被 `.gitignore` 排除，原始视频保留在本地；抽帧图片和后续标注可按阶段提交到个人 GitHub。
