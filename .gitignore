@@ -32,3 +32,9 @@ dataset/yolo/**/*.cache
 results/test_evaluation_clean/errors/
 results/v2_test_evaluation/errors/
 results/coco_external_test/
+
+# Track only the selected deployment checkpoint; keep other generated weights ignored.
+!weights/
+weights/*
+!weights/best.pt
+!weights/README.md
