@@ -66,5 +66,11 @@
 
 - 新增原始视频：`video/cup/cup_2.mp4`（237 帧）、`video/cup/cup_3.mp4`（185 帧）。
 - 从两个视频各均匀抽取 100 帧，保存为 `dataset/images/cup/cup2_*.jpg` 和 `dataset/images/cup/cup3_*.jpg`。
-- 新增 200 张图片当前尚未标注；标注完成后再纳入 YOLO 转换和训练集划分。
+- `cup2/cup3` 图片经过筛选后当前保留 110 张，均有对应 ISAT JSON；另有 90 张图片已按采集质量删除。
 - `video/` 被 `.gitignore` 排除，原始视频保留在本地；抽帧图片和后续标注可按阶段提交到个人 GitHub。
+
+## 2026-08-28 cup4 数据扩充
+
+- 新增原始视频：`video/cup/cup_4.mp4`（225 帧）。
+- 均匀抽取 100 帧，保存为 `dataset/images/cup/cup4_000001.jpg` 至 `cup4_000100.jpg`。
+- 完成筛选后 `cup4` 当前保留 69 张图片，69 张均有有效 ISAT JSON；其余图片按采集质量删除。
