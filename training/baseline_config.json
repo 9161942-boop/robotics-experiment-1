@@ -1,0 +1,15 @@
+{
+  "model": "yolo11n.pt",
+  "classes": ["mouse", "laptop", "cup", "phone"],
+  "epochs": 80,
+  "imgsz": 640,
+  "batch": 16,
+  "device": "0",
+  "workers": 0,
+  "seed": 42,
+  "ultralytics": "8.4.22",
+  "torch": "2.7.1+cu118",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "best_checkpoint_local": "runs/yolo11n_4class_baseline/weights/best.pt",
+  "note": "The checkpoint is ignored by Git because model binaries are large; rerun train_yolo.py or copy best.pt to Jetson."
+}

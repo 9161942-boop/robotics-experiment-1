@@ -1,0 +1,106 @@
+{
+  "classes": [
+    "mouse",
+    "laptop",
+    "cup",
+    "phone"
+  ],
+  "seed": 42,
+  "split_method": "contiguous_temporal_blocks_within_each_source_group",
+  "source_group_key": "dataset/source_groups.json frame-number ranges",
+  "splits": {
+    "train": {
+      "images": 421,
+      "objects": 506,
+      "objects_by_class": {
+        "cup": 212,
+        "laptop": 85,
+        "mouse": 119,
+        "phone": 90
+      },
+      "source_groups": [
+        "cup:cup_1",
+        "cup:cup_2_extra",
+        "cup:cup_2_original",
+        "cup:cup_3_extra",
+        "cup:cup_3_original",
+        "cup:cup_4_extra",
+        "cup:cup_4_original",
+        "laptop:laptop_1",
+        "laptop:laptop_2",
+        "laptop:laptop_3",
+        "laptop:laptop_4",
+        "mouse:mouse_1",
+        "mouse:mouse_2",
+        "mouse:mouse_3",
+        "mouse:mouse_4",
+        "phone:phone_1",
+        "phone:phone_2",
+        "phone:phone_3",
+        "phone:phone_4"
+      ]
+    },
+    "val": {
+      "images": 87,
+      "objects": 104,
+      "objects_by_class": {
+        "cup": 42,
+        "laptop": 17,
+        "mouse": 28,
+        "phone": 17
+      },
+      "source_groups": [
+        "cup:cup_1",
+        "cup:cup_2_extra",
+        "cup:cup_2_original",
+        "cup:cup_3_extra",
+        "cup:cup_3_original",
+        "cup:cup_4_extra",
+        "cup:cup_4_original",
+        "laptop:laptop_1",
+        "laptop:laptop_2",
+        "laptop:laptop_3",
+        "laptop:laptop_4",
+        "mouse:mouse_1",
+        "mouse:mouse_2",
+        "mouse:mouse_3",
+        "mouse:mouse_4",
+        "phone:phone_1",
+        "phone:phone_2",
+        "phone:phone_3",
+        "phone:phone_4"
+      ]
+    },
+    "test": {
+      "images": 87,
+      "objects": 104,
+      "objects_by_class": {
+        "cup": 42,
+        "laptop": 17,
+        "mouse": 28,
+        "phone": 17
+      },
+      "source_groups": [
+        "cup:cup_1",
+        "cup:cup_2_extra",
+        "cup:cup_2_original",
+        "cup:cup_3_extra",
+        "cup:cup_3_original",
+        "cup:cup_4_extra",
+        "cup:cup_4_original",
+        "laptop:laptop_1",
+        "laptop:laptop_2",
+        "laptop:laptop_3",
+        "laptop:laptop_4",
+        "mouse:mouse_1",
+        "mouse:mouse_2",
+        "mouse:mouse_3",
+        "mouse:mouse_4",
+        "phone:phone_1",
+        "phone:phone_2",
+        "phone:phone_3",
+        "phone:phone_4"
+      ]
+    }
+  }
+}

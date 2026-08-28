@@ -1,0 +1,21 @@
+{
+  "status": "superseded_after_source-group_split_correction",
+  "best_epoch": 63,
+  "validation": {
+    "precision": 0.95711,
+    "recall": 0.98471,
+    "mAP50": 0.98818,
+    "mAP50_95": 0.98033
+  },
+  "frame_diagnostic_test": {
+    "confidence": 0.25,
+    "match_iou": 0.5,
+    "correct_objects": 96,
+    "ground_truth_objects": 119,
+    "object_accuracy_percent": 80.67226890756302,
+    "precision_percent": 80.67226890756302,
+    "recall_percent": 80.67226890756302
+  },
+  "checkpoint_sha256": "315CEAA5B16A2568CEF56C8F50C05BBFD7E2406838D449EA13302632923693A3",
+  "reason_superseded": "The original single prefixes for laptop, mouse and phone were later mapped back to four source-video ranges per class so every appearance contributes to train, validation and test."
+}

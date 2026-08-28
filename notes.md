@@ -75,3 +75,14 @@
 - 均匀抽取 100 帧，保存为 `dataset/images/cup/cup4_000001.jpg` 至 `cup4_000100.jpg`。
 - 完成筛选后 `cup4` 当前保留 69 张图片，69 张均有有效 ISAT JSON；其余图片按采集质量删除。
 - 全量标注检查通过：四类共 595 张图片和 595 个 JSON；类别为 `mouse`、`laptop`、`cup`、`phone`，无空标注、无尺寸不一致、无越界分割点。
+
+## 2026-08-28 YOLO 转换与 PC 基线
+
+- 新增 `convert_isat_to_yolo.py`：从 ISAT `segmentation` 点重新计算 xyxy 外接框，再输出 YOLO `class x_center y_center width height`；统一类别顺序为 `mouse`、`laptop`、`cup`、`phone`。
+- 生成 `dataset/yolo`：train 421 张、val 87 张、test 87 张；对应目标数 506、104、104。四类在三个集合均有目标。`manifest.csv` 记录源图、采集批次、输出文件和类别统计。
+- 划分规则：根据第一次抽帧时的编号分配，将 laptop/mouse/phone 的单一文件名前缀恢复为各自 4 段视频；连同 cup 的来源，共 19 个实物/视频组。每个组内按文件序号使用连续 70/15/15 时间块，因此所有外观都参与训练；这仍是帧级诊断，最终验收需另采 20 个独立物体。
+- 发现并处理 ISAT 中同类重复框：转换时对同类框 IoU >= 0.995 去重，训练器不再提示重复标签。
+- 新增 `train_yolo.py`、`evaluate_yolo.py`、`realtime_detect.py`、`ros2_detector_node.py`。
+- PC 基线：Ultralytics 8.4.22、Python 3.13.9、PyTorch 2.7.1+cu118、RTX 4060 Laptop GPU；YOLO11n，640，batch 16，80 epochs，seed 42。验证 mAP50=0.988，mAP50-95=0.981。
+- v1 帧诊断测试（IoU=0.50、置信度=0.25）：96/119 正确，object accuracy=80.67%，precision=80.67%，recall=80.67%；错误案例已保存到 `results/test_evaluation_clean/errors`。由于之后修正了 19 个来源组的划分，v1 只作为过程记录且不能替代 20 个独立物体测试。
+- 首次训练因 Ultralytics 对相对 YAML 路径解析错误停止；`train_yolo.py` 现在启动时切换到项目根目录，`data.yaml` 使用项目内相对路径，已验证训练可完成。

@@ -1,0 +1,37 @@
+{
+  "cup": {
+    "cup": [
+      {"group": "cup_1", "start": 1, "end": 51},
+      {"group": "cup_2_original", "start": 52, "end": 107},
+      {"group": "cup_3_original", "start": 108, "end": 149},
+      {"group": "cup_4_original", "start": 150, "end": 200}
+    ],
+    "cup2": [{"group": "cup_2_extra", "start": 1, "end": 100}],
+    "cup3": [{"group": "cup_3_extra", "start": 1, "end": 100}],
+    "cup4": [{"group": "cup_4_extra", "start": 1, "end": 100}]
+  },
+  "laptop": {
+    "laptop": [
+      {"group": "laptop_1", "start": 1, "end": 54},
+      {"group": "laptop_2", "start": 55, "end": 115},
+      {"group": "laptop_3", "start": 116, "end": 170},
+      {"group": "laptop_4", "start": 171, "end": 200}
+    ]
+  },
+  "mouse": {
+    "mouse": [
+      {"group": "mouse_1", "start": 1, "end": 51},
+      {"group": "mouse_2", "start": 52, "end": 106},
+      {"group": "mouse_3", "start": 107, "end": 154},
+      {"group": "mouse_4", "start": 155, "end": 200}
+    ]
+  },
+  "phone": {
+    "phone": [
+      {"group": "phone_1", "start": 1, "end": 40},
+      {"group": "phone_2", "start": 41, "end": 104},
+      {"group": "phone_3", "start": 105, "end": 131},
+      {"group": "phone_4", "start": 132, "end": 200}
+    ]
+  }
+}

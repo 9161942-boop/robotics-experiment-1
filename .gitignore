@@ -17,3 +17,15 @@ weights/
 
 # Raw source videos are kept locally and documented separately.
 video/
+
+# Temporary threshold sweeps; keep the selected clean evaluation instead.
+results/test_sweep_*/
+results/val_evaluation_*/
+results/test_evaluation/
+
+# Rebuilt by convert_isat_to_yolo.py from the tracked source images.
+dataset/yolo/images/
+dataset/yolo/**/*.cache
+
+# Keep CSV/JSON summaries in Git; select only representative error images.
+results/test_evaluation_clean/errors/
