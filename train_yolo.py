@@ -32,7 +32,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="0", help="CUDA device, cpu, or auto")
     parser.add_argument("--workers", type=int, default=0, help="Use 0 on Windows for reliable multiprocessing")
     parser.add_argument("--project", type=Path, default=root / "runs")
-    parser.add_argument("--name", default="yolo11n_4class_baseline")
+    parser.add_argument("--name", default="yolo11n_4class_v2")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--patience", type=int, default=20)
     parser.add_argument("--resume", action="store_true")

@@ -19,7 +19,7 @@ from ultralytics import YOLO
 def parse_args() -> argparse.Namespace:
     root = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--weights", type=Path, default=root / "runs" / "yolo11n_4class_baseline" / "weights" / "best.pt")
+    parser.add_argument("--weights", type=Path, default=root / "runs" / "yolo11n_4class_v2" / "weights" / "best.pt")
     parser.add_argument("--source", default="0", help="Camera index such as 0, or a video/image path")
     parser.add_argument("--confidence", type=float, default=0.35)
     parser.add_argument("--imgsz", type=int, default=640)
