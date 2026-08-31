@@ -19,13 +19,18 @@ from ultralytics import YOLO
 def parse_args() -> argparse.Namespace:
     root = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--weights", type=Path, default=root / "runs" / "yolo11n_4class_v2" / "weights" / "best.pt")
+    parser.add_argument("--weights", type=Path, default=root / "weights" / "best.pt")
     parser.add_argument("--source", default="0", help="Camera index such as 0, or a video/image path")
     parser.add_argument("--confidence", type=float, default=0.35)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--device", default="0")
     parser.add_argument("--output", type=Path, default=None, help="Optional annotated video output")
     parser.add_argument("--fps-window", type=int, default=30)
+    parser.add_argument("--camera-width", type=int, default=640)
+    parser.add_argument("--camera-height", type=int, default=480)
+    parser.add_argument("--camera-fps", type=int, default=30)
+    parser.add_argument("--headless", action="store_true", help="Run without an OpenCV display window")
+    parser.add_argument("--max-frames", type=int, default=0, help="Stop after N frames; 0 means run until interrupted")
     return parser.parse_args()
 
 
@@ -41,7 +46,15 @@ def main() -> None:
         raise SystemExit("confidence must be in [0, 1] and fps-window must be at least 2")
 
     model = YOLO(str(args.weights.resolve()))
-    capture = cv2.VideoCapture(source_value(args.source))
+    source = source_value(args.source)
+    # V4L2 avoids GStreamer negotiation surprises for USB cameras. A one-frame
+    # buffer keeps the display close to live when inference is slower than input.
+    capture = cv2.VideoCapture(source, cv2.CAP_V4L2 if isinstance(source, int) else cv2.CAP_ANY)
+    if isinstance(source, int):
+        capture.set(cv2.CAP_PROP_FRAME_WIDTH, args.camera_width)
+        capture.set(cv2.CAP_PROP_FRAME_HEIGHT, args.camera_height)
+        capture.set(cv2.CAP_PROP_FPS, args.camera_fps)
+        capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
     if not capture.isOpened():
         raise SystemExit(f"Could not open source: {args.source}")
 
@@ -78,14 +91,18 @@ def main() -> None:
                 writer = cv2.VideoWriter(str(args.output), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
             if writer is not None:
                 writer.write(annotated)
-            cv2.imshow("YOLO detection", annotated)
-            if cv2.waitKey(1) & 0xFF in (27, ord("q")):
+            if not args.headless:
+                cv2.imshow("YOLO detection", annotated)
+                if cv2.waitKey(1) & 0xFF in (27, ord("q")):
+                    break
+            if args.max_frames and frames >= args.max_frames:
                 break
     finally:
         capture.release()
         if writer is not None:
             writer.release()
-        cv2.destroyAllWindows()
+        if not args.headless:
+            cv2.destroyAllWindows()
     print(f"Processed {frames} frames; average displayed FPS: {sum(fps_samples) / len(fps_samples):.2f}" if fps_samples else "Processed 0 frames")
 
 

@@ -22,10 +22,10 @@ from ultralytics import YOLO
 def parse_args() -> argparse.Namespace:
     root = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--weights", type=Path, default=root / "runs" / "yolo11n_4class_v2" / "weights" / "best.pt")
+    parser.add_argument("--weights", type=Path, default=root / "weights" / "best.pt")
     parser.add_argument("--images", type=Path, default=root / "dataset" / "yolo" / "images" / "test")
     parser.add_argument("--labels", type=Path, default=root / "dataset" / "yolo" / "labels" / "test")
-    parser.add_argument("--output", type=Path, default=root / "results" / "v2_test_evaluation")
+    parser.add_argument("--output", type=Path, default=root / "results" / "evaluation_runtime")
     parser.add_argument("--confidence", type=float, default=0.25)
     parser.add_argument("--match-iou", type=float, default=0.50)
     parser.add_argument("--nms-iou", type=float, default=0.70)

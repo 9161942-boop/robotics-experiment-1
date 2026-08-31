@@ -1,56 +1,96 @@
-# robotics-experiment-1
+# 实验一：目标检测与识别
 
-## Current dataset and baseline
+本项目使用自行采集和标注的数据，将 COCO 预训练 `yolov8n.pt` 迁移学习为
+四类桌面物体检测器，并部署到 Jetson Orin。模型类别为 `mouse`、`laptop`、
+`cup` 和 `phone`。
 
-The project currently uses one unified four-class detector:
-`mouse`, `laptop`, `cup`, and `phone`.  The source ISAT annotations are kept
-under `dataset/images/<class>`.  Run the conversion after changing labels:
+## 项目内容
+
+- `dataset/images/`：原始图片及 ISAT JSON 标注
+- `dataset/yolo/`：595 张图片的 YOLO 标注与 train/val/test 划分（图片可由转换脚本重建）
+- `weights/best.pt`：最终四类 YOLOv8n 权重
+- `training/yolov8n_4class_finetune/`：训练参数、曲线和混淆矩阵
+- `results/yolov8n_4class_finetune_test/`：帧级诊断结果和典型错误
+- `jetson_setup/`、`docs/`：Jetson 上传脚本和运行说明
+- `report/`：实验报告模板
+
+## 安装
+
+Windows 训练机：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+Jetson 不要从 PyPI 安装普通 `torch`/`torchvision`，应使用与 JetPack 匹配的
+NVIDIA 版本，具体见 [`docs/jetson_setup.md`](docs/jetson_setup.md)。
+
+## 数据转换与训练
+
+修改 ISAT 标注后，先重新生成 YOLO 数据集：
 
 ```powershell
 python convert_isat_to_yolo.py
+python train_yolo.py --epochs 100 --batch 16 --device 0 --workers 0
 ```
 
-It creates `dataset/yolo/data.yaml`, YOLO labels, a `manifest.csv`, and
-`conversion_summary.json`.  The 595 reviewed images are split into 421 train,
-87 validation, and 87 test images using contiguous temporal blocks within each
-of 19 recovered physical-object/video groups.  Every source appearance is
-represented in all three splits.  This is a frame-level diagnostic split, not the final
-20-independent-object acceptance test.
+训练仅使用 train/val，不使用 test。当前划分为 train 421、val 87、test 87；
+划分基于恢复出的 19 个实物/视频来源，每个来源都在三个集合中按时间块分配。
 
-## Train, evaluate, and display
-
-Ultralytics and CUDA are required for the baseline.  The first run uses a
-pretrained YOLO11n checkpoint and records its configuration under `runs/`:
+## 评估
 
 ```powershell
-python train_yolo.py --epochs 80 --batch 16 --device 0 --workers 0 --name yolo11n_4class_v2
-python evaluate_yolo.py --weights runs/yolo11n_4class_v2/weights/best.pt `
-  --images dataset/yolo/images/test --labels dataset/yolo/labels/test `
-  --output results/v2_test_evaluation --device 0
-python realtime_detect.py --weights runs/yolo11n_4class_v2/weights/best.pt --source 0
+python evaluate_yolo.py --device 0
 ```
 
-`evaluate_yolo.py` performs confidence filtering and class-aware one-to-one
-matching at IoU 0.50, then reports object accuracy, precision, recall, false
-positives/negatives, and error images.  For the course submission, replace the
-diagnostic test directory with a separately collected set containing at least
-20 independent objects and preserve the resulting `summary.json`.
+当前帧级诊断集有 87 张图像、104 个标注目标，结果为 103 个正确、1 个漏检、
+0 个误检，对象级诊断准确率 99.04%。由于相邻视频帧具有相关性，这个结果只能
+说明模型可用，不能代替课程要求的至少 20 个独立实物测试。独立测试请填写
+`results/independent_test_template.csv`。
 
-The superseded v1 run is retained in `training/v1_baseline_summary.json` for
-process evidence.  The corrected v2 run uses the 19-source-group split and
-records its configuration and metrics in `training/v2_baseline_summary.json`.
-Its best validation row is epoch 63: precision 0.99337, recall 0.99405,
-mAP50 0.99064, and mAP50-95 0.98244.  On the 104-object frame diagnostic
-test split it gives 103 correct matches, or 99.04% under the IoU 0.50 object
-rule.  This is still not the final course acceptance claim: the 20-object
-test set must be newly collected and must not share frames with training.
+## Jetson 实时识别
 
-The v2 diagnostic errors are preserved in `results/v2_typical_errors/`.  The
-cup case contains two nearly identical source annotations for one visible
-cup; the laptop case contains a visible mouse that is not annotated.  These
-are annotation-quality issues to correct or disclose before using the images
-as a final accuracy claim.
+上传文件：
 
-The ROS2 entry point is `ros2_detector_node.py`.  On Jetson, copy the best
-checkpoint to a local `weights/best.pt`, then run it with the camera topic and
-inspect the result using `ros2 topic echo /detections`.
+```powershell
+.\jetson_setup\deploy_to_jetson.ps1 -JetsonIp 192.168.43.30 -JetsonUser jetson
+```
+
+在 Jetson 图形终端运行：
+
+```bash
+cd ~/robotics_exp1/code
+source ~/venvs/robotics-yolo/bin/activate
+python realtime_detect.py \
+  --weights ~/robotics_exp1/weights/best.pt \
+  --source 0 --imgsz 320 --confidence 0.35 --device 0 \
+  --camera-width 640 --camera-height 480 --camera-fps 30 \
+  --output ~/robotics_exp1/results/demo.mp4
+```
+
+画面会显示检测框、类别、置信度、物体数量和滑动平均 FPS。按 `q` 退出；
+SSH 无图形环境时添加 `--headless`。
+
+## ROS2
+
+节点订阅 `sensor_msgs/Image`，发布 `vision_msgs/Detection2DArray`：
+
+```bash
+python ros2_detector_node.py \
+  --weights ~/robotics_exp1/weights/best.pt \
+  --image-topic /camera/image_raw --output-topic /detections --device 0
+ros2 topic echo /detections --once
+```
+
+## 最终权重
+
+`weights/best.pt` SHA-256：
+
+```text
+595C8FD32BE2A733BF0845A5FC89847DAD425A1FDEC249C0375E0DEA9B9CFBA5
+```
+
+提交前仍需补齐独立实物测试记录、Jetson 平均 FPS、ROS2 topic 截图、结果视频
+和完整实验报告。
