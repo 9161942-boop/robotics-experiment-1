@@ -3,15 +3,22 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$JetsonIp,
     [string]$JetsonUser = "jetson",
-    [string]$RemoteRoot = "~/robotics_exp1"
+    [string]$RemoteRoot = "~/robotics_exp1",
+    [string]$LocalWeights = ""
 )
 
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $remote = "$JetsonUser@$JetsonIp"
 
+if ([string]::IsNullOrWhiteSpace($LocalWeights)) {
+    $LocalWeights = Join-Path $projectRoot "weights\best.pt"
+} elseif (-not [IO.Path]::IsPathRooted($LocalWeights)) {
+    $LocalWeights = Join-Path $projectRoot $LocalWeights
+}
+
 $files = @(
-    @{ Local = Join-Path $projectRoot "weights\best.pt"; Remote = "$RemoteRoot/weights/best.pt" },
+    @{ Local = $LocalWeights; Remote = "$RemoteRoot/weights/best.pt" },
     @{ Local = Join-Path $projectRoot "realtime_detect.py"; Remote = "$RemoteRoot/code/realtime_detect.py" },
     @{ Local = Join-Path $projectRoot "ros2_detector_node.py"; Remote = "$RemoteRoot/code/ros2_detector_node.py" }
 )

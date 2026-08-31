@@ -58,6 +58,14 @@ python evaluate_yolo.py --device 0
 .\jetson_setup\deploy_to_jetson.ps1 -JetsonIp 192.168.43.30 -JetsonUser jetson
 ```
 
+若要上传刚训练出的其他权重，可直接指定路径：
+
+```powershell
+.\jetson_setup\deploy_to_jetson.ps1 `
+  -JetsonIp 192.168.43.30 -JetsonUser jetson `
+  -LocalWeights ".\runs\yolov8n_4class_finetune\weights\best.pt"
+```
+
 在 Jetson 图形终端运行：
 
 ```bash

@@ -19,6 +19,15 @@ cd "D:\matlab\机器人学集成小组项目\实验一"
 .\jetson_setup\deploy_to_jetson.ps1 -JetsonIp 192.168.43.30 -JetsonUser jetson
 ```
 
+如果新权重仍在训练输出目录，可用 `-LocalWeights` 直接指定，不需要先覆盖
+本地 `weights/best.pt`：
+
+```powershell
+.\jetson_setup\deploy_to_jetson.ps1 `
+  -JetsonIp 192.168.43.30 -JetsonUser jetson `
+  -LocalWeights ".\runs\yolov8n_4class_finetune\weights\best.pt"
+```
+
 脚本上传 `weights/best.pt`、`realtime_detect.py` 和 `ros2_detector_node.py`，
 并校验权重 SHA-256。密码在 SSH 提示中手动输入，不保存在脚本中。
 
