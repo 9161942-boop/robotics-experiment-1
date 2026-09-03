@@ -39,7 +39,7 @@ dataset/varify/*/*.jpg
 dataset/varify/*/*.jpeg
 dataset/varify/*/*.png
 dataset/varify/*/*.webp
-results/independent_test_runtime*/errors/
+results/independent_test_*/errors/
 results/independent_test_runtime_conf*/
 
 # Track only the selected deployment checkpoint; keep other generated weights ignored.

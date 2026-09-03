@@ -1,0 +1,81 @@
+﻿sample_id,source,expected_class,image_path,predicted_classes,top_class,top_confidence,expected_class_detected,criterion,detector_expected_label
+0d282b149be117dfe2110faa6c702228,local_varify,cup,dataset\varify\cup\0d282b149be117dfe2110faa6c702228.jpg,cup:0.421;dining table:0.282;bottle:0.257,cup,0.4207,1,expected class detected at confidence threshold,cup
+14bd809d444db18435346e17581d0f9d,local_varify,cup,dataset\varify\cup\14bd809d444db18435346e17581d0f9d.jpg,,,0.0,0,expected class detected at confidence threshold,cup
+14e5d57a78dfcc708d6e344f39e4bb3e,local_varify,cup,dataset\varify\cup\14e5d57a78dfcc708d6e344f39e4bb3e.jpg,bottle:0.416,bottle,0.4163,0,expected class detected at confidence threshold,cup
+17859eaca4c6cc5ac40aa04945904cfc,local_varify,cup,dataset\varify\cup\17859eaca4c6cc5ac40aa04945904cfc.jpg,cup:0.323,cup,0.3228,1,expected class detected at confidence threshold,cup
+2f4697e8c17a64891f3aad8ae03e91d4,local_varify,cup,dataset\varify\cup\2f4697e8c17a64891f3aad8ae03e91d4.jpg,cup:0.610;dining table:0.261,cup,0.6102,1,expected class detected at confidence threshold,cup
+35fe65b9e5dfc3a7d88df7d08d43486e,local_varify,cup,dataset\varify\cup\35fe65b9e5dfc3a7d88df7d08d43486e.jpg,cup:0.694,cup,0.6936,1,expected class detected at confidence threshold,cup
+41be5cb03d029a1b44c5e9926208b67e,local_varify,cup,dataset\varify\cup\41be5cb03d029a1b44c5e9926208b67e.jpg,cup:0.603;dining table:0.258,cup,0.6031,1,expected class detected at confidence threshold,cup
+61b01c7acfc51b03a3dc1bf391ffb826,local_varify,cup,dataset\varify\cup\61b01c7acfc51b03a3dc1bf391ffb826.jpg,dining table:0.318;cup:0.269;laptop:0.251,dining table,0.318,1,expected class detected at confidence threshold,cup
+6a0854801345a84d052b6c88a2c7eeb1,local_varify,cup,dataset\varify\cup\6a0854801345a84d052b6c88a2c7eeb1.jpg,bottle:0.334,bottle,0.3344,0,expected class detected at confidence threshold,cup
+796c958ea185ad1c42c89e32a25a6eda,local_varify,cup,dataset\varify\cup\796c958ea185ad1c42c89e32a25a6eda.jpg,cup:0.277,cup,0.277,1,expected class detected at confidence threshold,cup
+9227c85afe7daeddd0a2272746835233,local_varify,cup,dataset\varify\cup\9227c85afe7daeddd0a2272746835233.jpg,cup:0.413,cup,0.4127,1,expected class detected at confidence threshold,cup
+93f5ca87a1e405fc67ac1b4b49e3976d,local_varify,cup,dataset\varify\cup\93f5ca87a1e405fc67ac1b4b49e3976d.jpg,person:0.549;dining table:0.485;cup:0.383,person,0.5494,1,expected class detected at confidence threshold,cup
+94c33f3068d6d3e4e6064d95628a56f2,local_varify,cup,dataset\varify\cup\94c33f3068d6d3e4e6064d95628a56f2.jpg,bottle:0.883;bottle:0.451,bottle,0.8834,0,expected class detected at confidence threshold,cup
+9ff52d9cdcad3baf67e171d78a013e04,local_varify,cup,dataset\varify\cup\9ff52d9cdcad3baf67e171d78a013e04.jpg,bottle:0.832;bottle:0.506,bottle,0.8323,0,expected class detected at confidence threshold,cup
+ab1e0cb356315523a31f86b647693645,local_varify,cup,dataset\varify\cup\ab1e0cb356315523a31f86b647693645.jpg,knife:0.273,knife,0.2731,0,expected class detected at confidence threshold,cup
+c4c830e67c2bcacd18ca93ab30ff8b7e,local_varify,cup,dataset\varify\cup\c4c830e67c2bcacd18ca93ab30ff8b7e.jpg,cup:0.778,cup,0.7785,1,expected class detected at confidence threshold,cup
+c8489c63e1359cc7228e842792c8bd9f,local_varify,cup,dataset\varify\cup\c8489c63e1359cc7228e842792c8bd9f.jpg,cell phone:0.411;cup:0.270;dining table:0.257,cell phone,0.4107,1,expected class detected at confidence threshold,cup
+cdab654067183d04c919b422c13db389,local_varify,cup,dataset\varify\cup\cdab654067183d04c919b422c13db389.jpg,bottle:0.807,bottle,0.8072,0,expected class detected at confidence threshold,cup
+ef45b31d5ef3256dbab6801e7e6b5c6e,local_varify,cup,dataset\varify\cup\ef45b31d5ef3256dbab6801e7e6b5c6e.jpg,cup:0.269,cup,0.2686,1,expected class detected at confidence threshold,cup
+f03d2bee991f1e7bcc7e9e431f2b33d8,local_varify,cup,dataset\varify\cup\f03d2bee991f1e7bcc7e9e431f2b33d8.jpg,cup:0.769;laptop:0.334;dining table:0.325,cup,0.7693,1,expected class detected at confidence threshold,cup
+06ac4b4cef90af1d2bfc201aaa57b965,local_varify,laptop,dataset\varify\laptop\06ac4b4cef90af1d2bfc201aaa57b965.jpg,keyboard:0.742;tv:0.296;keyboard:0.263,keyboard,0.7417,0,expected class detected at confidence threshold,laptop
+28430a0240773eb2faffaf5b642981d3,local_varify,laptop,dataset\varify\laptop\28430a0240773eb2faffaf5b642981d3.jpg,keyboard:0.783;laptop:0.401;tv:0.257,keyboard,0.7832,1,expected class detected at confidence threshold,laptop
+28650419155066ae917ebc264027d17c,local_varify,laptop,dataset\varify\laptop\28650419155066ae917ebc264027d17c.jpg,laptop:0.912;keyboard:0.903;mouse:0.517,laptop,0.9121,1,expected class detected at confidence threshold,laptop
+3d4c3fe0111e498750d11f766f367fd9,local_varify,laptop,dataset\varify\laptop\3d4c3fe0111e498750d11f766f367fd9.jpg,laptop:0.854;mouse:0.551,laptop,0.8543,1,expected class detected at confidence threshold,laptop
+50dcdb9009729acdb9456e3be1ea3628,local_varify,laptop,dataset\varify\laptop\50dcdb9009729acdb9456e3be1ea3628.jpg,laptop:0.715;person:0.647,laptop,0.7146,1,expected class detected at confidence threshold,laptop
+51156d901d34958a574047ac5844988d,local_varify,laptop,dataset\varify\laptop\51156d901d34958a574047ac5844988d.jpg,mouse:0.931;keyboard:0.853;laptop:0.596;laptop:0.406;mouse:0.336,mouse,0.9315,1,expected class detected at confidence threshold,laptop
+69d27132aea29d4ca8f25db44e2978db,local_varify,laptop,dataset\varify\laptop\69d27132aea29d4ca8f25db44e2978db.jpg,laptop:0.452,laptop,0.4521,1,expected class detected at confidence threshold,laptop
+6ce1af37f203b4c3434ba04a3f4565d6,local_varify,laptop,dataset\varify\laptop\6ce1af37f203b4c3434ba04a3f4565d6.jpg,laptop:0.827,laptop,0.8265,1,expected class detected at confidence threshold,laptop
+8cb0fa841b379babe699f83f6dc7569f,local_varify,laptop,dataset\varify\laptop\8cb0fa841b379babe699f83f6dc7569f.jpg,keyboard:0.904;mouse:0.778;laptop:0.360;mouse:0.285,keyboard,0.9035,1,expected class detected at confidence threshold,laptop
+99a7881b3d325c6319999b214d76febe,local_varify,laptop,dataset\varify\laptop\99a7881b3d325c6319999b214d76febe.jpg,mouse:0.953;laptop:0.910;keyboard:0.810;book:0.519;banana:0.385;keyboard:0.355,mouse,0.9533,1,expected class detected at confidence threshold,laptop
+9b5ae442ecb3590b388327abecdf01d6,local_varify,laptop,dataset\varify\laptop\9b5ae442ecb3590b388327abecdf01d6.jpg,laptop:0.677;remote:0.478,laptop,0.6775,1,expected class detected at confidence threshold,laptop
+a790e977d28ec1878d28b434774dba44,local_varify,laptop,dataset\varify\laptop\a790e977d28ec1878d28b434774dba44.jpg,laptop:0.444,laptop,0.4443,1,expected class detected at confidence threshold,laptop
+c5762f68d2bed7a7ebd1c408bafd0e96,local_varify,laptop,dataset\varify\laptop\c5762f68d2bed7a7ebd1c408bafd0e96.jpg,keyboard:0.944;laptop:0.842,keyboard,0.944,1,expected class detected at confidence threshold,laptop
+d6d308f33e1c26f96d7eca431a3ced3b,local_varify,laptop,dataset\varify\laptop\d6d308f33e1c26f96d7eca431a3ced3b.jpg,laptop:0.603,laptop,0.6026,1,expected class detected at confidence threshold,laptop
+dc00cdff141eab5f1792b125e989f637,local_varify,laptop,dataset\varify\laptop\dc00cdff141eab5f1792b125e989f637.jpg,laptop:0.821;person:0.534;person:0.432;laptop:0.274,laptop,0.8214,1,expected class detected at confidence threshold,laptop
+e854ae87b6c582d5eec716cc1eb735b5,local_varify,laptop,dataset\varify\laptop\e854ae87b6c582d5eec716cc1eb735b5.jpg,keyboard:0.858;laptop:0.385;keyboard:0.330,keyboard,0.8579,1,expected class detected at confidence threshold,laptop
+eb34cf2752bf9c59d0b2990e3e536d91,local_varify,laptop,dataset\varify\laptop\eb34cf2752bf9c59d0b2990e3e536d91.jpg,laptop:0.560,laptop,0.5601,1,expected class detected at confidence threshold,laptop
+f40bf430599006e68e54e25cdb2a98cf,local_varify,laptop,dataset\varify\laptop\f40bf430599006e68e54e25cdb2a98cf.jpg,laptop:0.830;person:0.761;keyboard:0.411;remote:0.399;person:0.347,laptop,0.8298,1,expected class detected at confidence threshold,laptop
+f7cc245124e0e4dea777a6aa6a94a812,local_varify,laptop,dataset\varify\laptop\f7cc245124e0e4dea777a6aa6a94a812.jpg,laptop:0.406;chair:0.253,laptop,0.4064,1,expected class detected at confidence threshold,laptop
+ff8227b47f70ffea6f028d6004e73941,local_varify,laptop,dataset\varify\laptop\ff8227b47f70ffea6f028d6004e73941.jpg,laptop:0.710;mouse:0.573,laptop,0.7097,1,expected class detected at confidence threshold,laptop
+0529579d66f0531561f9207bb007887c,local_varify,mouse,dataset\varify\mouse\0529579d66f0531561f9207bb007887c.jpg,,,0.0,0,expected class detected at confidence threshold,mouse
+11274f1d3c7cd341562578cc5c56e233,local_varify,mouse,dataset\varify\mouse\11274f1d3c7cd341562578cc5c56e233.jpg,,,0.0,0,expected class detected at confidence threshold,mouse
+22b486a11bbe1ed21a91033d853fdddc,local_varify,mouse,dataset\varify\mouse\22b486a11bbe1ed21a91033d853fdddc.jpg,mouse:0.633;cell phone:0.557;suitcase:0.305,mouse,0.6333,1,expected class detected at confidence threshold,mouse
+295fdac8a5ae9ba5231bdc2d72308de1,local_varify,mouse,dataset\varify\mouse\295fdac8a5ae9ba5231bdc2d72308de1.jpg,mouse:0.717;dining table:0.303,mouse,0.7167,1,expected class detected at confidence threshold,mouse
+39119b39cb1d9362bd9fabc5a55ccb03,local_varify,mouse,dataset\varify\mouse\39119b39cb1d9362bd9fabc5a55ccb03.jpg,mouse:0.803,mouse,0.803,1,expected class detected at confidence threshold,mouse
+4a0480035b0f5ad27923119f020e026b,local_varify,mouse,dataset\varify\mouse\4a0480035b0f5ad27923119f020e026b.jpg,mouse:0.971,mouse,0.9707,1,expected class detected at confidence threshold,mouse
+4deda907a0aa2bde2ee93f0587240b16,local_varify,mouse,dataset\varify\mouse\4deda907a0aa2bde2ee93f0587240b16.jpg,car:0.539;mouse:0.466;person:0.463;car:0.285,car,0.5388,1,expected class detected at confidence threshold,mouse
+55289fc65a2d6658d53d600f0ce4ec1f,local_varify,mouse,dataset\varify\mouse\55289fc65a2d6658d53d600f0ce4ec1f.jpg,mouse:0.710,mouse,0.7104,1,expected class detected at confidence threshold,mouse
+589f98a4610520ede3fe96d76a81d934,local_varify,mouse,dataset\varify\mouse\589f98a4610520ede3fe96d76a81d934.jpg,mouse:0.862;cup:0.352,mouse,0.862,1,expected class detected at confidence threshold,mouse
+5a50c1bf7b8ce5d04010e392ff296a14,local_varify,mouse,dataset\varify\mouse\5a50c1bf7b8ce5d04010e392ff296a14.jpg,mouse:0.509;suitcase:0.390,mouse,0.5091,1,expected class detected at confidence threshold,mouse
+635eedd89005199c4644ea128ada33e4,local_varify,mouse,dataset\varify\mouse\635eedd89005199c4644ea128ada33e4.jpg,mouse:0.980;mouse:0.575;mouse:0.535,mouse,0.9796,1,expected class detected at confidence threshold,mouse
+796f6d3c925a1314f4d4498047a76c9e,local_varify,mouse,dataset\varify\mouse\796f6d3c925a1314f4d4498047a76c9e.jpg,mouse:0.971;mouse:0.347,mouse,0.9715,1,expected class detected at confidence threshold,mouse
+93f58039c9b1c7792346089f0e63c6dc,local_varify,mouse,dataset\varify\mouse\93f58039c9b1c7792346089f0e63c6dc.jpg,mouse:0.934;dining table:0.261,mouse,0.9341,1,expected class detected at confidence threshold,mouse
+986478cf10469de2e9f07b47a4fb89b2,local_varify,mouse,dataset\varify\mouse\986478cf10469de2e9f07b47a4fb89b2.jpg,cell phone:0.343,cell phone,0.3434,0,expected class detected at confidence threshold,mouse
+a856af2204f11fe54800a03e7f30fa68,local_varify,mouse,dataset\varify\mouse\a856af2204f11fe54800a03e7f30fa68.jpg,mouse:0.673,mouse,0.6731,1,expected class detected at confidence threshold,mouse
+b445b7c8bfbefc64c2a21fe38d141e1c,local_varify,mouse,dataset\varify\mouse\b445b7c8bfbefc64c2a21fe38d141e1c.jpg,mouse:0.832;dining table:0.333,mouse,0.8323,1,expected class detected at confidence threshold,mouse
+c20c8b5501828b49445a34b3b85a2354,local_varify,mouse,dataset\varify\mouse\c20c8b5501828b49445a34b3b85a2354.jpg,mouse:0.758,mouse,0.7575,1,expected class detected at confidence threshold,mouse
+cd32449b16deb2728cd71ad455a21a25,local_varify,mouse,dataset\varify\mouse\cd32449b16deb2728cd71ad455a21a25.jpg,mouse:0.714;cell phone:0.350;remote:0.275,mouse,0.7144,1,expected class detected at confidence threshold,mouse
+d7186238c91db628b3160c23736bc26f,local_varify,mouse,dataset\varify\mouse\d7186238c91db628b3160c23736bc26f.jpg,mouse:0.922;dining table:0.291,mouse,0.9222,1,expected class detected at confidence threshold,mouse
+f9c9e87888f3e30ef1958311c6d36ef8,local_varify,mouse,dataset\varify\mouse\f9c9e87888f3e30ef1958311c6d36ef8.jpg,mouse:0.603,mouse,0.603,1,expected class detected at confidence threshold,mouse
+phone_web_01,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_01.jpg,cell phone:0.948;book:0.321,cell phone,0.9479,1,expected class detected at confidence threshold,cell phone
+phone_web_02,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_02.webp,cell phone:0.934,cell phone,0.9342,1,expected class detected at confidence threshold,cell phone
+phone_web_03,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_03.jpg,laptop:0.283,laptop,0.2833,0,expected class detected at confidence threshold,cell phone
+phone_web_04,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_04.jpg,cell phone:0.682,cell phone,0.6823,1,expected class detected at confidence threshold,cell phone
+phone_web_05,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_05.jpg,cell phone:0.908;person:0.607,cell phone,0.9084,1,expected class detected at confidence threshold,cell phone
+phone_web_06,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_06.jpg,cell phone:0.939;tv:0.746;person:0.658;person:0.630;person:0.562;person:0.519;person:0.377;person:0.323;person:0.294;person:0.264,cell phone,0.9389,1,expected class detected at confidence threshold,cell phone
+phone_web_07,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_07.jpg,cell phone:0.895;person:0.580,cell phone,0.8947,1,expected class detected at confidence threshold,cell phone
+phone_web_08,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_08.jpg,cell phone:0.791,cell phone,0.7906,1,expected class detected at confidence threshold,cell phone
+phone_web_09,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_09.jpg,cell phone:0.795,cell phone,0.7952,1,expected class detected at confidence threshold,cell phone
+phone_web_10,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_10.jpg,cell phone:0.724;person:0.519;person:0.267;laptop:0.260,cell phone,0.7236,1,expected class detected at confidence threshold,cell phone
+phone_web_11,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_11.jpg,cell phone:0.927;person:0.524;person:0.255,cell phone,0.9269,1,expected class detected at confidence threshold,cell phone
+phone_web_12,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_12.png,cell phone:0.809;person:0.637;person:0.408;person:0.341,cell phone,0.8093,1,expected class detected at confidence threshold,cell phone
+phone_web_13,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_13.png,,,0.0,0,expected class detected at confidence threshold,cell phone
+phone_web_14,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_14.jpg,cell phone:0.693,cell phone,0.6926,1,expected class detected at confidence threshold,cell phone
+phone_web_15,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_15.jpg,,,0.0,0,expected class detected at confidence threshold,cell phone
+phone_web_16,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_16.png,cell phone:0.947;person:0.650,cell phone,0.9472,1,expected class detected at confidence threshold,cell phone
+phone_web_17,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_17.png,,,0.0,0,expected class detected at confidence threshold,cell phone
+phone_web_18,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_18.png,,,0.0,0,expected class detected at confidence threshold,cell phone
+phone_web_19,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_19.png,,,0.0,0,expected class detected at confidence threshold,cell phone
+phone_web_20,wikimedia_commons,phone,dataset\varify\phone_web\phone_web_20.jpg,cell phone:0.475,cell phone,0.4748,1,expected class detected at confidence threshold,cell phone

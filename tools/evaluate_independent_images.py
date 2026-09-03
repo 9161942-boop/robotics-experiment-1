@@ -22,6 +22,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--nms-iou", type=float, default=0.70)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--device", default="0")
+    parser.add_argument(
+        "--phone-label",
+        default="phone",
+        help="Detector label used for the expected phone folder (COCO uses 'cell phone').",
+    )
     return parser.parse_args()
 
 
@@ -63,7 +68,8 @@ def main() -> None:
             (str(result.names[int(class_id)]), float(confidence))
             for class_id, confidence in zip(result.boxes.cls.cpu().tolist(), result.boxes.conf.cpu().tolist())
         ]
-        expected_confidences = [confidence for class_name, confidence in detections if class_name == expected]
+        detector_expected = args.phone_label if expected == "phone" else expected
+        expected_confidences = [confidence for class_name, confidence in detections if class_name == detector_expected]
         correct = bool(expected_confidences)
         top = max(detections, key=lambda item: item[1], default=("", 0.0))
         class_totals.setdefault(expected, Counter()).update(total=1, correct=int(correct))
@@ -77,6 +83,7 @@ def main() -> None:
             "top_confidence": round(top[1], 4),
             "expected_class_detected": int(correct),
             "criterion": "expected class detected at confidence threshold",
+            "detector_expected_label": detector_expected,
         }
         rows.append(row)
         if not correct:
