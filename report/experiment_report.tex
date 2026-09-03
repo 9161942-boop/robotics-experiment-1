@@ -25,9 +25,10 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=OUCblue,urlcolor=OUCcyan,citecolor=OUCblue}
 \usepackage{microtype}
-\usepackage{tocloft}
+\usepackage{titlesec}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+\setmainfont{Times New Roman}
 \setlength{\headheight}{25pt}
 \sloppy
 \setlength{\parindent}{2em}
@@ -36,14 +37,15 @@
 \rowcolors{2}{OUClight!45}{white}
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{1}
-\ctexset{
-  section = {format=\Large\bfseries\color{OUCblue},beforeskip=1.2em,afterskip=0.5em},
-  subsection = {format=\large\bfseries\color{OUCcyan},beforeskip=0.8em,afterskip=0.3em}
-}
-\renewcommand{\cftsecfont}{\bfseries\color{OUCblue}}
-\renewcommand{\cftsecpagefont}{\color{OUCgray}}
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
-\setlength{\cftbeforesecskip}{0.35em}
+\titleformat{\section}
+  {\Large\bfseries\color{OUCblue}}
+  {\color{OUCcyan}\thesection}{0.65em}{}
+  [\vspace{0.2em}{\color{OUCcyan}\titlerule[0.55pt]}]
+\titleformat{\subsection}
+  {\large\bfseries\color{OUCblue}}
+  {\color{OUCcyan}\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.35em}{0.45em}
+\titlespacing*{\subsection}{0pt}{0.85em}{0.25em}
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\color{OUCblue}\small 机器人学集成小组项目\quad 实验一}
@@ -52,35 +54,40 @@
 \renewcommand{\headrulewidth}{0.5pt}
 \renewcommand{\headrule}{\hbox to\headwidth{\color{OUCcyan}\leaders\hrule height \headrulewidth\hfill}}
 \newtcolorbox{summarybox}{
-  enhanced,breakable,colback=OUClight,colframe=OUCcyan,
-  boxrule=0.8pt,arc=2mm,left=5mm,right=5mm,top=3mm,bottom=3mm
+  enhanced,breakable,colback=OUClight,colframe=OUClight,
+  boxrule=0pt,borderline west={2.2pt}{0pt}{OUCcyan},arc=0mm,
+  left=5mm,right=5mm,top=3mm,bottom=3mm
 }
 \newtcolorbox{metricbox}[2][]{
-  enhanced,colback=white,colframe=OUCblue,boxrule=0.7pt,arc=2mm,
+  enhanced,colback=OUClight,colframe=OUClight,boxrule=0pt,
+  borderline west={2.2pt}{0pt}{OUCgold},arc=0mm,
   title={\bfseries\color{white}#2},coltitle=white,
   colbacktitle=OUCblue,#1
 }
-\newcommand{\tagtext}[1]{\colorbox{OUCgold!18}{\textcolor{OUCblue}{\textbf{#1}}}}
+\newcommand{\tagtext}[1]{\textcolor{OUCcyan}{\textbf{#1}}}
 \newcommand{\code}[1]{\texttt{\footnotesize #1}}
 
 \begin{document}
 
 \begin{titlepage}
 \thispagestyle{empty}
-\vspace*{0.8cm}
-\begin{flushright}
-\textcolor{OUCcyan}{\rule{0.72\textwidth}{1.2pt}}\\[-0.1em]
-{\small\color{OUCgray}计算机科学与技术学院\quad 机器人学集成小组项目}
-\end{flushright}
-\vspace{0.9cm}
-\begin{tcolorbox}[enhanced,colback=OUCblue,colframe=OUCblue,boxrule=0pt,arc=0mm,left=8mm,right=8mm,top=7mm,bottom=7mm]
-{\color{white}\Huge\bfseries 实验一}\\[0.35cm]
-{\color{OUCgold!90!white}\LARGE\bfseries 目标检测与识别}\\[0.45cm]
-{\color{white!85}\large 基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}
-\end{tcolorbox}
-\vfill
+\vspace*{1.1cm}
+\begin{center}
+{\small\color{OUCcyan}机器人学集成小组项目\quad |\quad 计算机科学与技术学院}\\[1.0cm]
+{\color{OUCblue}\LARGE\bfseries 实验一：目标检测与识别}\\[0.35cm]
+{\color{OUCgray}\large 基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}\\[0.55cm]
+{\color{OUCcyan}\rule{0.78\textwidth}{0.8pt}}
+\end{center}
+\vspace{0.65cm}
+\noindent{\bfseries\color{OUCblue}摘要}\quad
+本实验围绕桌面物体检测任务，完成了从视频抽帧、人工标注、YOLO 格式转换、YOLOv8 训练，到 Jetson 实时部署和 ROS2 结果发布的完整流程。系统保留 mouse、laptop、cup、phone 四类自定义输出，并使用完全独立的 80 张实物照片进行验收。结果显示 72 张照片识别正确，准确率为 90\%；Jetson 演示视频中的实时速度约为 15 FPS。
+
+\vspace{0.35cm}
+\noindent{\bfseries\color{OUCblue}关键词}\quad 目标检测；YOLOv8；Jetson；ROS2；独立实物测试
+
+\vspace{0.75cm}
 \begin{summarybox}
-\textbf{验收摘要}\\[0.3em]
+\textbf{验收指标摘要}\\[0.3em]
 \begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l X}
 识别类别 & mouse、laptop、cup、phone\\
 独立实物测试 & 80 张照片，72 张通过，准确率 90\%\\
@@ -89,26 +96,20 @@ Jetson 演示 & 640$\times$480，画面显示约 15 FPS\\
 报告来源 & 本 PDF 由 \code{experiment\_report.tex} 使用 XeLaTeX 直接编译
 \end{tabularx}
 \end{summarybox}
-\vspace{0.9cm}
+\vspace{0.75cm}
 \begin{center}
 \color{OUCgray}\large 个人 GitHub：\\[0.2em]
 \href{https://github.com/9161942-boop/robotics-experiment-1}{\url{https://github.com/9161942-boop/robotics-experiment-1}}
 \end{center}
 \vfill
 \begin{center}
-\textcolor{OUCblue}{\rule{0.72\textwidth}{1.2pt}}\\[0.35em]
+\textcolor{OUCcyan}{\rule{0.72\textwidth}{0.8pt}}\\[0.35em]
 {\color{OUCgray}2026 年 9 月 3 日}
 \end{center}
 \end{titlepage}
 
-\pagenumbering{roman}
-\begin{center}
-{\color{OUCblue}\Large\bfseries 内容导航}
-\end{center}
-\vspace{0.4em}
-\tableofcontents
-\newpage
 \pagenumbering{arabic}
+
 
 \section{实验目标与系统概览}
 本实验完成四类桌面物体的采集、标注、训练、部署和验收。系统链路为：
