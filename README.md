@@ -11,6 +11,7 @@
 - `weights/best.pt`：最终四类 YOLOv8n 权重
 - `training/yolov8n_4class_finetune/`：训练参数、曲线和混淆矩阵
 - `results/yolov8n_4class_finetune_test/`：帧级诊断结果和典型错误
+- `results/yolov8n_dataset_yolo_scratch.md`：仅使用 `dataset/yolo/` 从零训练的 YOLOv8n 结果
 - `jetson_setup/`、`docs/`：Jetson 上传脚本和运行说明
 - `report/`：中英文 LaTeX 实验报告、PDF 和证据分析
 
@@ -59,6 +60,16 @@ COCO YOLOv8n 对照模型识别 61/80（76.25%）。完整逐图结果见
 [`tools/evaluate_independent_images.py`](tools/evaluate_independent_images.py)。
 这只是没有人工框标注的图片级筛查代理，不能写成 IoU 准确率，因此正式验收表仍待
 现场实物复核。
+
+为验证转换后数据集能否直接训练，另使用 `dataset/yolo/data.yaml` 和未加载外部
+权重的 `yolov8n.yaml` 从零训练 100 轮。最佳模型在 87 张验证图像上达到
+mAP@0.5=0.991、mAP@0.5:0.95=0.966；标准 Ultralytics test 评估为
+mAP@0.5=0.993、mAP@0.5:0.95=0.960。在 87 张 test 图像上，帧级诊断为
+103/104 个目标匹配（精确率 98.10%，召回率 99.04%）。对 `dataset/varify/`
+当前每类 20 张独立图片的图片级筛查为 41/80（51.25%），该结果没有人工框标注，
+只能作为筛查代理，不能替代课程要求的独立实物验收。模型路径为
+`runs/yolov8n_dataset_yolo_scratch/weights/best.pt`，完整记录见
+`results/yolov8n_dataset_yolo_scratch.md`。
 
 ## Jetson 实时识别
 

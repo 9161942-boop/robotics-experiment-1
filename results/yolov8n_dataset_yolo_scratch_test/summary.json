@@ -1,0 +1,36 @@
+{
+  "weights": "D:\\matlab\\机器人学集成小组项目\\实验一\\runs\\yolov8n_dataset_yolo_scratch\\weights\\best.pt",
+  "images": 87,
+  "ground_truth_objects": 104,
+  "predicted_objects": 105,
+  "correct_objects": 103,
+  "object_accuracy_percent": 99.03846153846153,
+  "precision_percent": 98.0952380952381,
+  "recall_percent": 99.03846153846153,
+  "false_negative": 1,
+  "false_positive": 2,
+  "confidence_threshold": 0.25,
+  "match_iou_threshold": 0.5,
+  "nms_iou_threshold": 0.7,
+  "per_class": {
+    "cup": {
+      "gt": 42,
+      "correct": 41,
+      "false_negative": 1,
+      "false_positive": 2
+    },
+    "laptop": {
+      "gt": 17,
+      "correct": 17
+    },
+    "mouse": {
+      "gt": 28,
+      "correct": 28
+    },
+    "phone": {
+      "gt": 17,
+      "correct": 17
+    }
+  },
+  "acceptance_note": "Use at least 20 independently collected objects for the final course accuracy; this split is a frame-level diagnostic."
+}
