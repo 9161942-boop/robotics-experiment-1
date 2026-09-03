@@ -12,7 +12,7 @@
 - `training/yolov8n_4class_finetune/`：训练参数、曲线和混淆矩阵
 - `results/yolov8n_4class_finetune_test/`：帧级诊断结果和典型错误
 - `jetson_setup/`、`docs/`：Jetson 上传脚本和运行说明
-- `report/`：实验报告模板
+- `report/`：中英文 LaTeX 实验报告、PDF 和证据分析
 
 ## 安装
 
@@ -100,5 +100,7 @@ ros2 topic echo /detections --once
 595C8FD32BE2A733BF0845A5FC89847DAD425A1FDEC249C0375E0DEA9B9CFBA5
 ```
 
-提交前仍需补齐独立实物测试记录、Jetson 平均 FPS、ROS2 topic 截图、结果视频
-和完整实验报告。
+报告已整理为 `report/experiment_report_en.pdf`（英文提交版）和
+`report/experiment_report_zh.pdf`（中文对照版），对应的 LaTeX 源文件也一并保留。
+课程最终验收仍需补齐独立实物测试记录、Jetson 稳定平均 FPS 和 ROS2 topic 截图；
+这些缺口已在报告中明确标注，不能用帧级诊断结果替代。

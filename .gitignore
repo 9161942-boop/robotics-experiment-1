@@ -38,3 +38,15 @@ results/coco_external_test/
 weights/*
 !weights/best.pt
 !weights/README.md
+
+# Report build and visual-check artifacts
+report/*.aux
+report/*.log
+report/*.out
+report/tmp/
+report/_*.png
+report/notes.md
+report/task_plan.md
+
+# Local third-party installers
+vmware_setup/
