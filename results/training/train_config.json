@@ -1,0 +1,17 @@
+{
+  "started_at_utc": "2026-08-31T04:01:33.114811+00:00",
+  "completed_at_utc": "2026-08-31T04:17:10.230045+00:00",
+  "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "model": ".\\yolov8n.pt",
+  "data": "D:\\matlab\\机器人学集成小组项目\\实验一\\dataset\\yolo\\data.yaml",
+  "epochs": 100,
+  "imgsz": 640,
+  "batch": 16,
+  "device": "0",
+  "workers": 0,
+  "seed": 42,
+  "patience": 25,
+  "resume": false,
+  "ultralytics": "8.4.22"
+}

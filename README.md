@@ -126,4 +126,8 @@ Jetson 演示视频显示约 15 FPS；ROS2 节点、topic 配置和运行说明�
 - LaTeX 源文件：report/experiment_report.tex，使用 XeLaTeX 直接编译
 - GitHub 提交记录截图：report/github_commit_history.png
 - Jetson 抽帧图：report/jetson_demo_montage.jpg
+- 数据标注示例：report/dataset_annotation_examples.jpg
+- 独立测试统计图：report/independent_accuracy.png
+- 训练曲线与混淆矩阵：results/training/results.png、results/training/confusion_matrix_normalized.png
+- 报告内含从采集、标注、转换、训练、测试到 Jetson/ROS2 发布的完整流程图与验收要求对照表
 - 报告包含个人 GitHub 链接和分阶段 commit 记录，满足课程提交规范
