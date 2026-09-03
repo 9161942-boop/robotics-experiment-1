@@ -50,15 +50,15 @@ python evaluate_yolo.py --device 0
 说明模型可用，不能代替课程要求的至少 20 个独立实物测试。独立测试请填写
 `results/independent_test_template.csv`。
 
-本机另运行了一次统一阈值为 0.25 的图片级筛查：`cup`、`laptop`、`mouse`
-各使用 `dataset/varify/` 中的 20 张图片，`phone` 使用 `phone_web/` 中从
-Wikimedia Commons 下载的 20 张公开图片。共识别 40/80（50.00%），分项为
-`cup` 14/20、`laptop` 20/20、`mouse` 3/20、`phone` 3/20。完整逐图结果见
-[`results/independent_test_runtime/summary.json`](results/independent_test_runtime/summary.json)
-和 [`predictions.csv`](results/independent_test_runtime/predictions.csv)，
-运行脚本为 [`tools/evaluate_independent_images.py`](tools/evaluate_independent_images.py)。
-这只是没有人工框标注的图片级筛查代理，不能写成 IoU 准确率；公开 phone 图片也
-不能替代课程要求的独立实物拍摄验收，因此正式验收表仍待现场实物复核。
+本机另运行了统一阈值为 0.25 的图片级筛查：`cup`、`laptop`、`mouse`、`phone`
+各使用 `dataset/varify/` 中的 20 张图片。项目训练权重识别 47/80（58.75%），
+分项为 `cup` 14/20、`laptop` 20/20、`mouse` 3/20、`phone` 10/20；原始
+COCO YOLOv8n 对照模型识别 61/80（76.25%）。完整逐图结果见
+`results/independent_test_runtime_updated/` 和
+`results/independent_test_yolov8n_coco_updated/`，运行脚本为
+[`tools/evaluate_independent_images.py`](tools/evaluate_independent_images.py)。
+这只是没有人工框标注的图片级筛查代理，不能写成 IoU 准确率，因此正式验收表仍待
+现场实物复核。
 
 ## Jetson 实时识别
 

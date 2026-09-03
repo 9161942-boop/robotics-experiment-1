@@ -23,6 +23,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--device", default="0")
     parser.add_argument(
+        "--folders",
+        nargs="+",
+        default=None,
+        help="Optional folder names to include, e.g. cup laptop mouse phone.",
+    )
+    parser.add_argument(
         "--phone-label",
         default="phone",
         help="Detector label used for the expected phone folder (COCO uses 'cell phone').",
@@ -34,9 +40,11 @@ def main() -> None:
     args = parse_args()
     if not args.weights.exists():
         raise SystemExit(f"Weights do not exist: {args.weights}")
+    candidate_folders = args.folders or [path.name for path in sorted(args.input_root.iterdir()) if path.is_dir()]
     files = sorted(
         path
-        for path in args.input_root.glob("*/*")
+        for folder in candidate_folders
+        for path in (args.input_root / folder).glob("*")
         if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
     )
     if not files:

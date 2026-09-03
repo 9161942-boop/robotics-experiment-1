@@ -1,0 +1,33 @@
+{
+  "protocol": "Independent image-level recognition check: a sample is correct when at least one detection of the expected folder class survives the confidence threshold.",
+  "warning": "This is a screening proxy because the images have no manually verified ground-truth boxes; it must not be reported as IoU-based object detection accuracy without annotation.",
+  "weights": "D:\\matlab\\机器人学集成小组项目\\实验一\\weights\\best.pt",
+  "input_root": "D:\\matlab\\机器人学集成小组项目\\实验一\\dataset\\varify",
+  "images": 80,
+  "recognized": 47,
+  "accuracy_percent": 58.75,
+  "confidence_threshold": 0.25,
+  "nms_iou_threshold": 0.7,
+  "per_class": {
+    "cup": {
+      "images": 20,
+      "recognized": 14,
+      "accuracy_percent": 70.0
+    },
+    "laptop": {
+      "images": 20,
+      "recognized": 20,
+      "accuracy_percent": 100.0
+    },
+    "mouse": {
+      "images": 20,
+      "recognized": 3,
+      "accuracy_percent": 15.0
+    },
+    "phone": {
+      "images": 20,
+      "recognized": 10,
+      "accuracy_percent": 50.0
+    }
+  }
+}
