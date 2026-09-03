@@ -1,13 +1,10 @@
-\documentclass[UTF8,a4paper,12pt]{ctexart}
-\usepackage{geometry}
-\geometry{left=2.0cm,right=2.0cm,top=1.8cm,bottom=1.8cm}
-\usepackage[table]{xcolor}
-% A restrained paper-style palette: ink, teal accent, warm evidence highlight.
-\definecolor{OUCblue}{HTML}{20354A}
-\definecolor{OUCcyan}{HTML}{2A7F78}
-\definecolor{OUClight}{HTML}{F1F7F6}
-\definecolor{OUCgold}{HTML}{C58A2A}
-\definecolor{OUCgray}{HTML}{667085}
+\documentclass[11pt,conference,a4paper]{IEEEtran}
+\usepackage{xeCJK}
+\setCJKmainfont{SimSun}
+\setCJKsansfont{SimHei}
+\setCJKmonofont{SimSun}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
 \usepackage{graphicx}
 \graphicspath{{./}{../results/training/}}
 \usepackage{booktabs}
@@ -15,238 +12,180 @@
 \usepackage{array}
 \usepackage{float}
 \usepackage{caption}
-\captionsetup{font={small},labelfont={bf,color=OUCcyan},labelsep=period,justification=centering}
-\usepackage{enumitem}
-\setlist[itemize]{leftmargin=1.4em,itemsep=0.2em,topsep=0.2em}
-\usepackage{tcolorbox}
-\tcbuselibrary{skins,breakable}
-\usepackage{fancyhdr}
-\usepackage{lastpage}
+\captionsetup{font=footnotesize,labelfont=bf,labelsep=period,justification=centering}
+\usepackage[table]{xcolor}
+\definecolor{Ink}{HTML}{1F2937}
+\definecolor{Accent}{HTML}{0F766E}
+\definecolor{AccentLight}{HTML}{F0F7F6}
+\definecolor{Rule}{HTML}{CBD5E1}
+\definecolor{Muted}{HTML}{64748B}
+\usepackage{url}
 \usepackage{hyperref}
-\hypersetup{colorlinks=true,linkcolor=OUCblue,urlcolor=OUCcyan,citecolor=OUCblue}
+\hypersetup{colorlinks=true,linkcolor=Accent,urlcolor=Accent}
 \usepackage{microtype}
-\usepackage{titlesec}
+\usepackage{placeins}
+\usepackage{flushend}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.1em,topsep=0.1em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.15em,topsep=0.1em}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
-\setmainfont{Times New Roman}
-\setlength{\headheight}{25pt}
-\sloppy
-\setlength{\parindent}{2em}
-\setlength{\parskip}{0.35em}
-\renewcommand{\arraystretch}{1.25}
-\rowcolors{2}{OUClight!45}{white}
-\setcounter{secnumdepth}{2}
-\setcounter{tocdepth}{1}
-\titleformat{\section}
-  {\Large\bfseries\color{OUCblue}}
-  {\color{OUCcyan}\thesection}{0.65em}{}
-  [\vspace{0.2em}{\color{OUCcyan}\titlerule[0.55pt]}]
-\titleformat{\subsection}
-  {\large\bfseries\color{OUCblue}}
-  {\color{OUCcyan}\thesubsection}{0.5em}{}
-\titlespacing*{\section}{0pt}{1.35em}{0.45em}
-\titlespacing*{\subsection}{0pt}{0.85em}{0.25em}
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{\color{OUCblue}\small 机器人学集成小组项目\quad 实验一}
-\rhead{\color{OUCgray}\small 目标检测与识别}
-\cfoot{\color{OUCgray}\small \thepage\ /\ \pageref{LastPage}}
-\renewcommand{\headrulewidth}{0.5pt}
-\renewcommand{\headrule}{\hbox to\headwidth{\color{OUCcyan}\leaders\hrule height \headrulewidth\hfill}}
-\newtcolorbox{summarybox}{
-  enhanced,breakable,colback=OUClight,colframe=OUClight,
-  boxrule=0pt,borderline west={2.2pt}{0pt}{OUCcyan},arc=0mm,
-  left=5mm,right=5mm,top=3mm,bottom=3mm
-}
-\newtcolorbox{metricbox}[2][]{
-  enhanced,colback=OUClight,colframe=OUClight,boxrule=0pt,
-  borderline west={2.2pt}{0pt}{OUCgold},arc=0mm,
-  title={\bfseries\color{white}#2},coltitle=white,
-  colbacktitle=OUCblue,#1
-}
-\newcommand{\tagtext}[1]{\textcolor{OUCcyan}{\textbf{#1}}}
+\usetikzlibrary{arrows.meta,positioning}
 \newcommand{\code}[1]{\texttt{\footnotesize #1}}
-
+\newcommand{\markterm}[1]{\textcolor{Accent}{\textbf{#1}}}
+\newcommand{\tightcaption}[1]{\caption{#1}\vspace{-0.4em}}
+\renewcommand{\arraystretch}{1.12}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
 \begin{document}
 
-\begin{titlepage}
-\thispagestyle{empty}
-\vspace*{1.1cm}
-\begin{center}
-{\small\color{OUCcyan}机器人学集成小组项目\quad |\quad 计算机科学与技术学院}\\[1.0cm]
-{\color{OUCblue}\LARGE\bfseries 实验一：目标检测与识别}\\[0.35cm]
-{\color{OUCgray}\large 基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}\\[0.55cm]
-{\color{OUCcyan}\rule{0.78\textwidth}{0.8pt}}
-\end{center}
-\vspace{0.65cm}
-\noindent{\bfseries\color{OUCblue}摘要}\quad
-本实验围绕桌面物体检测任务，完成了从视频抽帧、人工标注、YOLO 格式转换、YOLOv8 训练，到 Jetson 实时部署和 ROS2 结果发布的完整流程。系统保留 mouse、laptop、cup、phone 四类自定义输出，并使用完全独立的 80 张实物照片进行验收。结果显示 72 张照片识别正确，准确率为 90\%；Jetson 演示视频中的实时速度约为 15 FPS。
+\title{实验一：基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}
+\author{\IEEEauthorblockN{机器人学集成小组项目}
+\IEEEauthorblockA{中国海洋大学计算机科学与技术学院\\
+个人 GitHub：\url{https://github.com/9161942-boop/robotics-experiment-1}}}
+\maketitle
 
-\vspace{0.35cm}
-\noindent{\bfseries\color{OUCblue}关键词}\quad 目标检测；YOLOv8；Jetson；ROS2；独立实物测试
+\begin{abstract}
+本文报告一个面向桌面物体的端到端目标检测系统。实验从视频抽帧和 ISAT 人工标注开始，经 YOLO detection 格式转换，在四类自定义数据上训练 YOLOv8n，并将最佳权重部署到 Jetson Orin。系统同时保留 mouse、laptop、cup、phone 四类输出，通过 ROS2 发布 \code{/detections}。在完全独立的 80 张实物照片上，系统通过 72 张，图片级准确率为 90\%；Jetson 演示视频显示约 15 FPS。报告同时给出数据、训练、独立测试、部署、错误案例和 GitHub 分阶段提交证据。
+\end{abstract}
 
-\vspace{0.75cm}
-\begin{summarybox}
-\textbf{验收指标摘要}\\[0.3em]
-\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l X}
-识别类别 & mouse、laptop、cup、phone\\
-独立实物测试 & 80 张照片，72 张通过，准确率 90\%\\
-Jetson 演示 & 640$\times$480，画面显示约 15 FPS\\
-结果发布 & ROS2 \code{/detections}，消息类型 \code{vision\_msgs/Detection2DArray}\\
-报告来源 & 本 PDF 由 \code{experiment\_report.tex} 使用 XeLaTeX 直接编译
-\end{tabularx}
-\end{summarybox}
-\vspace{0.75cm}
-\begin{center}
-\color{OUCgray}\large 个人 GitHub：\\[0.2em]
-\href{https://github.com/9161942-boop/robotics-experiment-1}{\url{https://github.com/9161942-boop/robotics-experiment-1}}
-\end{center}
-\vfill
-\begin{center}
-\textcolor{OUCcyan}{\rule{0.72\textwidth}{0.8pt}}\\[0.35em]
-{\color{OUCgray}2026 年 9 月 3 日}
-\end{center}
-\end{titlepage}
-
-\pagenumbering{arabic}
-
+\begin{IEEEkeywords}
+目标检测，YOLOv8，Jetson，ROS2，独立实物测试，实验报告
+\end{IEEEkeywords}
 
 \section{实验目标与系统概览}
-本实验完成四类桌面物体的采集、标注、训练、部署和验收。系统链路为：
-\tagtext{摄像头采集} $\rightarrow$ \tagtext{YOLOv8 检测} $\rightarrow$
-\tagtext{Jetson 实时显示} $\rightarrow$ \tagtext{ROS2 发布}。
-最终权重仅保留四个自定义类别，可直接用于本实验程序。
+本实验的目标是建立一套可运行、可复现、可验收的桌面物体检测链路。系统输入为摄像头图像，核心模型为四类 YOLOv8n，输出包含类别、边界框和置信度，并在 Jetson 上实时显示。完整链路为：\markterm{摄像头采集} $\rightarrow$ \markterm{YOLOv8 检测} $\rightarrow$ \markterm{Jetson 实时显示} $\rightarrow$ \markterm{ROS2 发布}。
 
-\begin{summarybox}
-\textbf{验收结论：}独立实物图片测试为 72/80（90\%），高于 80\% 门槛；Jetson 视频画面显示约 15 FPS，高于 5 FPS 门槛；报告、数据、模型、程序、视频、运行说明和错误案例均已整理。
-\end{summarybox}
+\begin{quote}\small
+\textbf{验收结果：}独立实物照片测试 72/80（90\%），高于 80\% 门槛；Jetson 视频画面显示约 15 FPS，高于 5 FPS 门槛；数据集、模型、程序、视频、运行说明和错误案例均已归档。
+\end{quote}
 
+\FloatBarrier
 \section{完整实验流程}
-实验按“采集—标注—转换—训练—验证—部署—验收—归档”的顺序完成。每一步都产生可追溯文件，最终由 GitHub 分阶段 commit 固化。
+实验遵循“采集—标注—转换—训练—验证—部署—验收—归档”的顺序。每一步均产生可追溯文件，最终通过 GitHub 分阶段 commit 固化。
 
 \begin{figure}[H]
 \centering
+\resizebox{\columnwidth}{!}{%
 \begin{tikzpicture}[
-  flow/.style={draw=OUCblue,fill=OUClight,rounded corners=2mm,minimum width=2.45cm,minimum height=0.85cm,align=center,font=\small\bfseries,text=OUCblue},
-  arrow/.style={-{Stealth[length=2.5mm]},very thick,color=OUCcyan}
+  flow/.style={draw=Ink,fill=AccentLight,rounded corners=1mm,minimum width=2.75cm,minimum height=0.62cm,align=center,font=\small\bfseries,text=Ink},
+  arrow/.style={-{Stealth[length=2mm]},semithick,color=Accent}
 ]
-\node[flow] (a) {1. 采集\&筛选};
-\node[flow,right=0.35cm of a] (b) {2. ISAT 标注};
-\node[flow,right=0.35cm of b] (c) {3. YOLO 转换};
-\node[flow,right=0.35cm of c] (d) {4. YOLOv8 训练};
-\node[flow,below=0.55cm of d] (e) {5. 验证\&诊断};
-\node[flow,left=0.35cm of e] (f) {6. 独立实物测试};
-\node[flow,left=0.35cm of f] (g) {7. Jetson 部署};
-\node[flow,left=0.35cm of g] (h) {8. ROS2 发布};
+\node[flow] (a) {1. 采集与筛选};
+\node[flow,right=0.38cm of a] (b) {2. ISAT 标注};
+\node[flow,right=0.38cm of b] (c) {3. YOLO 转换};
+\node[flow,right=0.38cm of c] (d) {4. YOLOv8 训练};
+\node[flow,below=0.45cm of d] (e) {5. 验证与诊断};
+\node[flow,left=0.38cm of e] (f) {6. 独立实物测试};
+\node[flow,left=0.38cm of f] (g) {7. Jetson 部署};
+\node[flow,left=0.38cm of g] (h) {8. ROS2 发布};
 \draw[arrow] (a)--(b)--(c)--(d);
 \draw[arrow] (d)--(e)--(f)--(g)--(h);
-\end{tikzpicture}
-\caption{从原始视频到可验收系统的完整流程}
+\end{tikzpicture}}
+\tightcaption{从原始视频到可验收系统的完整实验流程}
 \end{figure}
 
-\begin{enumerate}[label=\textbf{步骤 \arabic*}：,leftmargin=5.5em,itemsep=0.35em]
-\item 从桌面物体视频中抽帧，筛选清晰、角度和距离不同的样本，形成四类原始图片。
+\begin{enumerate}
+\item 从桌面物体视频中抽帧，筛选清晰且具有不同角度、距离和背景的样本，形成四类原始图片。
 \item 使用 ISAT 绘制边界框并检查类别一致性，保存原始图片和 JSON 标注。
 \item 将 ISAT 标注转换为 YOLO detection 格式，按 train/val/test 划分并检查标签数量。
 \item 以 COCO 预训练 YOLOv8n 为初始化训练 100 个 epoch，记录参数、曲线和最佳权重。
-\item 在验证集和 test 诊断集上计算 Precision、Recall、mAP，并保存漏检、误检案例。
+\item 在验证集和 test 诊断集上计算 Precision、Recall、mAP，并保存漏检与误检案例。
 \item 使用完全未参与训练的 80 张独立实物照片进行图片级筛查，统计各类别和总体通过率。
 \item 将四类权重部署到 Jetson Orin，运行摄像头程序，检查检测框、类别、置信度和 FPS。
-\item 通过 ROS2 节点把图像检测结果封装为 Detection2DArray 并发布到 /detections，最后整理报告和 GitHub 记录。
+\item 通过 ROS2 节点把图像检测结果封装为 Detection2DArray 并发布到 \code{/detections}，最后整理报告和 GitHub 记录。
 \end{enumerate}
 
+\FloatBarrier
 \section{硬件、软件与数据集}
 \begin{table}[H]
 \centering
+\scriptsize
 \caption{实验环境与数据配置}
-\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l X >{\bfseries\color{OUCblue}}l X}
+\begin{tabularx}{\columnwidth}{>{\bfseries}p{0.23\columnwidth} X}
 \toprule
-训练平台 & Windows 11 + RTX 4060 Laptop GPU & 部署平台 & Jetson Orin，Ubuntu 20.04\\
-框架 & YOLOv8n，Ultralytics 8.4.22 & ROS2 & Humble\\
-输入图像 & 640$\times$480 USB 摄像头 & 消息 & \code{Detection2DArray}\\
-类别 & mouse / laptop / cup / phone & 图像总数 & 595（421/87/87）\\
+训练平台 & Windows 11 + RTX 4060 Laptop GPU\\
+部署平台 & Jetson Orin，Ubuntu 20.04\\
+框架与版本 & YOLOv8n，Ultralytics 8.4.22\\
+ROS2 & Humble，消息为 \code{Detection2DArray}\\
+输入图像 & 640$\times$480 USB 摄像头\\
+类别与规模 & mouse / laptop / cup / phone；图像总数 595（421/87/87）\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-数据来自桌面物体视频抽帧，经 ISAT 标注并转换为 YOLO detection 格式。训练、验证和测试划分相互独立，测试集没有参与训练。下图给出四类数据的真实样本与 YOLO 边界框示例。
+数据来自桌面物体视频抽帧，经 ISAT 标注并转换为 YOLO detection 格式。训练、验证和测试划分相互独立，测试集没有参与训练。图~\ref{fig:annotation} 给出四类样本及其人工边界框。
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.94\textwidth]{dataset_annotation_examples.jpg}
-\caption{数据集样本与人工标注框示例}
+\includegraphics[width=0.98\columnwidth]{dataset_annotation_examples.jpg}
+\tightcaption{数据集样本与人工标注框示例}
+\label{fig:annotation}
 \end{figure}
 
-\section{训练方法与过程}
-以 COCO 预训练 YOLOv8n 为初始化，在四类数据集上训练 100 个 epoch，输入尺寸 640，batch size 16，推理置信度阈值 0.25；Jetson 演示使用 0.35。训练过程、配置和权重均保存在仓库中，最终模型文件为 \code{weights/best.pt}，类别数为 4。
+\FloatBarrier
+\section{训练方法与模型质量}
+以 COCO 预训练 YOLOv8n 为初始化，在四类数据集上训练 100 个 epoch，输入尺寸 640，batch size 16，推理置信度阈值 0.25；Jetson 演示使用 0.35。训练配置、曲线和最佳权重保存在仓库中，最终模型为四类输出的 \code{weights/best.pt}。
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.93\textwidth]{results.png}
-\caption{训练过程指标曲线（仓库 \code{results/training/results.png}）}
+\includegraphics[width=0.98\columnwidth]{results.png}
+\tightcaption{训练过程指标曲线（对应仓库 \code{results/training/results.png}）}
 \end{figure}
 
-\section{模型质量与独立实物测试}
 \begin{table}[H]
 \centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
 \caption{验证集与诊断集结果}
-\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
+\begin{tabular}{lcccc}
 \toprule
-数据/指标 & Precision & Recall & mAP@50 & mAP@50:95\\
+数据/指标 & P & R & mAP@50 & mAP@50:95\\
 \midrule
 dataset/yolo 验证集 & 0.658 & 0.748 & 0.766 & 0.701\\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.58\textwidth]{confusion_matrix_normalized.png}
-\caption{四类目标的归一化混淆矩阵}
+\includegraphics[width=0.72\columnwidth]{confusion_matrix_normalized.png}
+\tightcaption{四类目标的归一化混淆矩阵}
 \end{figure}
 
 独立验收集共 80 张照片，每个类别 20 张，按“该照片中目标是否被正确识别”统计：cup 17/20、laptop 19/20、mouse 18/20、phone 18/20，总计 72/80（90\%）。未通过样本为 \code{04\_cup.jpg}、\code{12\_cup.jpg}、\code{13\_cup.jpg}、\code{21\_laptop.jpg}、\code{42\_mouse.jpg}、\code{46\_mouse.jpg}、\code{72\_phone.jpg}、\code{80\_phone.jpg}。
 
-\begin{metricbox}[colback=OUClight!45]{独立实物验收}
+\begin{figure}[H]
 \centering
-{\fontsize{28}{32}\selectfont\color{OUCblue}\bfseries 90\%}
-\quad
-{\large 72 / 80 张照片通过，超过 80\% 要求}
-\end{metricbox}
+\includegraphics[width=0.98\columnwidth]{independent_accuracy.png}
+\tightcaption{80 张独立实物照片的分类型通过率与 80\% 验收门槛}
+\end{figure}
+
+\FloatBarrier
+\section{Jetson 部署与 ROS2 发布}
+Jetson 演示视频分辨率为 640$\times$480，画面叠加检测框、类别、置信度和 FPS。原视频中的 FPS 显示约 15.0，满足不低于 5 FPS 的验收要求；抽帧中可同时看到 mouse、phone、laptop 和 cup 的检测框。
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.88\textwidth]{independent_accuracy.png}
-\caption{80 张独立实物照片的分类型通过率与验收门槛}
+\includegraphics[width=0.98\columnwidth]{jetson_demo_montage.jpg}
+\tightcaption{Jetson 演示视频抽帧（原视频：\code{results/videos/jetson\_demo.mp4}）}
 \end{figure}
 
-\section{Jetson 实时检测结果}
-Jetson 演示视频为 640$\times$480，画面叠加检测框、类别、置信度和 FPS。原视频中的 FPS 显示约 15.0，满足不低于 5 FPS 的验收要求。下图为视频中不同时间点的检测画面；其中可同时看到 mouse、phone、laptop 和 cup 的检测框。
+检测节点订阅 \code{/camera/image\_raw}，推理后发布 \code{/detections}（\code{vision\_msgs/Detection2DArray}）。程序、启动方式、参数和验证命令写入 \code{docs/ros2\_quickstart.md}，现场验证命令为：
+\begin{quote}\small\code{ros2 topic echo /detections --once}\end{quote}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.93\textwidth]{jetson_demo_montage.jpg}
-\caption{Jetson 演示视频抽帧（原视频：\code{results/videos/jetson\_demo.mp4}）}
-\end{figure}
+\FloatBarrier
+\section{错误分析与可复现性}
+错误案例已保存于 \code{results/independent\_test\_80/errors/} 和 \code{results/evaluation\_final/errors/}。失败主要与小目标、运动模糊、遮挡和低置信度有关。后续可补充困难样本、提高输入尺寸、增加数据增强，并使用 TensorRT 优化部署速度。
 
-\section{ROS2 发布与运行说明}
-检测节点订阅 \code{/camera/image\_raw}，推理后发布 \code{/detections}（\code{vision\_msgs/Detection2DArray}）。程序、启动方式、参数和验证命令写入 \code{docs/ros2\_quickstart.md}。需要现场检查时可运行：
-\begin{summarybox}
-\code{ros2 topic echo /detections --once}
-\end{summarybox}
-
-\section{典型错误与改进方向}
-错误案例已保存于 \code{results/independent\_test\_80/errors/} 和
-\code{results/evaluation\_final/errors/}。失败主要与小目标、运动模糊、遮挡和低置信度有关。后续可补充困难样本、提高输入尺寸、增加数据增强，并使用 TensorRT 优化部署速度。
-
+\FloatBarrier
 \section{GitHub 提交记录与材料追踪}
-按照课程要求，报告、数据、代码、模型和结果均上传至个人 GitHub，并保留分阶段 commit 记录，未采用一次性全量提交。仓库链接为：
-\href{https://github.com/9161942-boop/robotics-experiment-1}{\url{https://github.com/9161942-boop/robotics-experiment-1}}。
+按照课程要求，报告、数据、代码、模型和结果均上传至个人 GitHub，并保留分阶段 commit 记录，未采用一次性全量提交。仓库链接为：\url{https://github.com/9161942-boop/robotics-experiment-1}。
 
 \begin{table}[H]
 \centering
+\scriptsize
 \caption{代表性分阶段提交}
-\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l l X}
+\begin{tabularx}{\columnwidth}{>{\bfseries}p{0.20\columnwidth} p{0.20\columnwidth} X}
 \toprule
 阶段 & Commit & 内容\\
 \midrule
@@ -262,39 +201,34 @@ Jetson 部署 & \code{14a710c} & 实时检测演示视频\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.88\textwidth]{github_commit_history.png}
-\caption{GitHub main 分支提交记录截图（页面访问时间：2026-09-03）}
+\includegraphics[width=0.98\columnwidth]{github_commit_history.png}
+\tightcaption{GitHub main 分支提交记录截图（页面访问时间：2026-09-03）}
 \end{figure}
 
-\section{提交材料清单}
-\begin{itemize}[itemsep=0.02em,topsep=0.08em]
-\item 数据集：\code{dataset/images/}、\code{dataset/yolo/}，另附 80 张独立测试照片；
-\item 模型：\code{weights/best.pt}（四类输出）；
-\item 程序：\code{src/}、\code{scripts/}；
-\item 结果视频：\code{results/videos/jetson\_demo.mp4}；
-\item 运行说明：\code{README.md}、\code{docs/ros2\_quickstart.md}；
-\item 结果与错误案例：\code{results/independent\_test\_80/}、\code{results/evaluation\_final/}；
-\item 报告源文件与 PDF：\code{report/experiment\_report.tex}、\code{report/experiment\_report.pdf}。
-\end{itemize}
-
-\enlargethispage{2.5cm}
-\section{结论}
-本实验完成了从数据采集、标注、YOLOv8 训练到 Jetson 实时检测和 ROS2 发布的完整链路。四类独立实物照片准确率为 90\%，Jetson 视频显示约 15 FPS，达到本实验的主要验收指标。所有材料已按目录整理，并通过 GitHub 分阶段 commit 留存。
+\FloatBarrier
+\section{提交材料与验收结论}
+提交材料包括：数据集 \code{dataset/images/}、\code{dataset/yolo/}；四类模型 \code{weights/best.pt}；程序 \code{src/}、\code{scripts/}；Jetson 视频 \code{results/videos/jetson\_demo.mp4}；运行说明 \code{README.md}、\code{docs/ros2\_quickstart.md}；结果、错误案例和报告源文件。所有材料按目录整理，并通过 GitHub 分阶段 commit 留存。
 
 \begin{table}[H]
 \centering
+\scriptsize
 \caption{验收要求与材料证据对照}
-\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}p{0.28\textwidth} X p{0.12\textwidth}}
+\begin{tabularx}{\columnwidth}{>{\bfseries}p{0.27\columnwidth} X p{0.13\columnwidth}}
 \toprule
 验收要求 & 对应证据 & 状态\\
 \midrule
 同时识别不少于 2 类 & 四类模型（mouse、laptop、cup、phone）及 80 张独立照片测试记录 & 达成\\
 20 个物体正确率不低于 80\% & 独立测试汇总：72/80，准确率 90\%，并附类别统计图 & 达成\\
-Jetson 实时速度不低于 5 FPS & \code{results/videos/jetson\_demo.mp4} 中叠加显示约 15 FPS & 达成\\
-保存结果与典型错误案例 & \code{results/independent\_test\_80/}、\code{results/evaluation\_final/} 及错误样例目录 & 达成\\
+Jetson 实时速度不低于 5 FPS & \path{results/videos/jetson_demo.mp4} 中叠加显示约 15 FPS & 达成\\
+保存结果与典型错误案例 & \path{results/independent_test_80/}、\path{results/evaluation_final/} 及错误样例目录 & 达成\\
 ROS2 发布识别结果 & 节点发布 \code{/detections}，启动与 \code{ros2 topic echo} 命令写入运行说明 & 已实现\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
+\FloatBarrier
+\section*{结论}
+本实验完成了从数据采集、标注、YOLOv8 训练到 Jetson 实时检测和 ROS2 发布的完整链路。四类独立实物照片准确率为 90\%，Jetson 视频显示约 15 FPS，达到本实验的主要验收指标。论文式报告、源文件、数据、模型、程序、视频、运行说明和错误案例均已整理并上传 GitHub。
+
+\flushend
 \end{document}

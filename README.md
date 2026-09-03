@@ -123,7 +123,7 @@ Jetson 演示视频显示约 15 FPS；ROS2 节点、topic 配置和运行说明�
 ## 验收报告与 GitHub 证据
 
 - 中文验收 PDF：report/experiment_report_acceptance.pdf
-- LaTeX 源文件：report/experiment_report.tex，使用 XeLaTeX 直接编译
+- LaTeX 源文件：report/experiment_report.tex，使用 XeLaTeX + IEEEtran 双栏论文模板直接编译
 - GitHub 提交记录截图：report/github_commit_history.png
 - Jetson 抽帧图：report/jetson_demo_montage.jpg
 - 数据标注示例：report/dataset_annotation_examples.jpg
