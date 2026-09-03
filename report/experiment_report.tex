@@ -1,0 +1,209 @@
+\documentclass[UTF8,a4paper,12pt]{ctexart}
+\usepackage{geometry}
+\geometry{left=2.0cm,right=2.0cm,top=1.8cm,bottom=1.8cm}
+\usepackage{xcolor}
+\definecolor{OUCblue}{HTML}{164A7B}
+\definecolor{OUCcyan}{HTML}{1D9AAA}
+\definecolor{OUClight}{HTML}{EAF4F7}
+\definecolor{OUCgold}{HTML}{E4A11B}
+\definecolor{OUCgray}{HTML}{5B6573}
+\usepackage{graphicx}
+\graphicspath{{./}{../results/training/}}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small,labelfont={bf,color=OUCblue},labelsep=period}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.2em,topsep=0.2em}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=OUCblue,urlcolor=OUCcyan,citecolor=OUCblue}
+\usepackage{microtype}
+\setlength{\headheight}{25pt}
+\sloppy
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.35em}
+\renewcommand{\arraystretch}{1.25}
+\setcounter{secnumdepth}{2}
+\ctexset{
+  section = {format=\Large\bfseries\color{OUCblue},beforeskip=1.2em,afterskip=0.5em},
+  subsection = {format=\large\bfseries\color{OUCcyan},beforeskip=0.8em,afterskip=0.3em}
+}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{OUCblue}\small 机器人学集成小组项目\quad 实验一}
+\rhead{\color{OUCgray}\small 目标检测与识别}
+\cfoot{\color{OUCgray}\small \thepage\ /\ \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{OUCcyan}\leaders\hrule height \headrulewidth\hfill}}
+\newtcolorbox{summarybox}{
+  enhanced,breakable,colback=OUClight,colframe=OUCcyan,
+  boxrule=0.8pt,arc=2mm,left=5mm,right=5mm,top=3mm,bottom=3mm
+}
+\newtcolorbox{metricbox}[2][]{
+  enhanced,colback=white,colframe=OUCblue,boxrule=0.7pt,arc=2mm,
+  title={\bfseries\color{white}#2},coltitle=white,
+  colbacktitle=OUCblue,#1
+}
+\newcommand{\tagtext}[1]{\colorbox{OUCgold!18}{\textcolor{OUCblue}{\textbf{#1}}}}
+\newcommand{\code}[1]{\texttt{\footnotesize #1}}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{0.8cm}
+\begin{flushright}
+\textcolor{OUCcyan}{\rule{0.72\textwidth}{1.2pt}}\\[-0.1em]
+{\small\color{OUCgray}计算机科学与技术学院\quad 机器人学集成小组项目}
+\end{flushright}
+\vspace{1.1cm}
+{\color{OUCblue}\Huge\bfseries 实验一}\\[0.35cm]
+{\color{OUCcyan}\LARGE\bfseries 目标检测与识别}\\[1.2cm]
+{\color{OUCgray}\Large 基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}
+\vfill
+\begin{summarybox}
+\textbf{验收摘要}\\[0.3em]
+\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l X}
+识别类别 & mouse、laptop、cup、phone\\
+独立实物测试 & 80 张照片，72 张通过，准确率 90\%\\
+Jetson 演示 & 640$\times$480，画面显示约 15 FPS\\
+结果发布 & ROS2 \code{/detections}，消息类型 \code{vision\_msgs/Detection2DArray}\\
+报告来源 & 本 PDF 由 \code{experiment\_report.tex} 使用 XeLaTeX 直接编译
+\end{tabularx}
+\end{summarybox}
+\vspace{0.9cm}
+\begin{center}
+\color{OUCgray}\large 个人 GitHub：\\[0.2em]
+\href{https://github.com/9161942-boop/robotics-experiment-1}{\url{https://github.com/9161942-boop/robotics-experiment-1}}
+\end{center}
+\vfill
+\begin{center}
+\textcolor{OUCblue}{\rule{0.72\textwidth}{1.2pt}}\\[0.35em]
+{\color{OUCgray}2026 年 9 月 3 日}
+\end{center}
+\end{titlepage}
+
+\section{实验目标与系统概览}
+本实验完成四类桌面物体的采集、标注、训练、部署和验收。系统链路为：
+\tagtext{摄像头采集} $\rightarrow$ \tagtext{YOLOv8 检测} $\rightarrow$
+\tagtext{Jetson 实时显示} $\rightarrow$ \tagtext{ROS2 发布}。
+最终权重仅保留四个自定义类别，可直接用于本实验程序。
+
+\begin{summarybox}
+\textbf{验收结论：}独立实物图片测试为 72/80（90\%），高于 80\% 门槛；Jetson 视频画面显示约 15 FPS，高于 5 FPS 门槛；报告、数据、模型、程序、视频、运行说明和错误案例均已整理。
+\end{summarybox}
+
+\section{硬件、软件与数据集}
+\begin{table}[H]
+\centering
+\caption{实验环境与数据配置}
+\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l X >{\bfseries\color{OUCblue}}l X}
+\toprule
+训练平台 & Windows 11 + RTX 4060 Laptop GPU & 部署平台 & Jetson Orin，Ubuntu 20.04\\
+框架 & YOLOv8n，Ultralytics 8.4.22 & ROS2 & Humble\\
+输入图像 & 640$\times$480 USB 摄像头 & 消息 & \code{Detection2DArray}\\
+类别 & mouse / laptop / cup / phone & 图像总数 & 595（421/87/87）\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+数据来自桌面物体视频抽帧，经 ISAT 标注并转换为 YOLO detection 格式。训练、验证和测试划分相互独立，测试集没有参与训练。
+
+\section{训练方法与过程}
+以 COCO 预训练 YOLOv8n 为初始化，在四类数据集上训练 100 个 epoch，输入尺寸 640，batch size 16，推理置信度阈值 0.25；Jetson 演示使用 0.35。训练过程、配置和权重均保存在仓库中，最终模型文件为 \code{weights/best.pt}，类别数为 4。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.93\textwidth]{results.png}
+\caption{训练过程指标曲线（仓库 \code{results/training/results.png}）}
+\end{figure}
+
+\section{模型质量与独立实物测试}
+\begin{table}[H]
+\centering
+\caption{验证集与诊断集结果}
+\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
+\toprule
+数据/指标 & Precision & Recall & mAP@50 & mAP@50:95\\
+\midrule
+dataset/yolo 验证集 & 0.658 & 0.748 & 0.766 & 0.701\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+独立验收集共 80 张照片，每个类别 20 张，按“该照片中目标是否被正确识别”统计：cup 17/20、laptop 19/20、mouse 18/20、phone 18/20，总计 72/80（90\%）。未通过样本为 \code{04\_cup.jpg}、\code{12\_cup.jpg}、\code{13\_cup.jpg}、\code{21\_laptop.jpg}、\code{42\_mouse.jpg}、\code{46\_mouse.jpg}、\code{72\_phone.jpg}、\code{80\_phone.jpg}。
+
+\begin{metricbox}[colback=OUClight!45]{独立实物验收}
+\centering
+{\fontsize{28}{32}\selectfont\color{OUCblue}\bfseries 90\%}
+\quad
+{\large 72 / 80 张照片通过，超过 80\% 要求}
+\end{metricbox}
+
+\section{Jetson 实时检测结果}
+Jetson 演示视频为 640$\times$480，画面叠加检测框、类别、置信度和 FPS。原视频中的 FPS 显示约 15.0，满足不低于 5 FPS 的验收要求。下图为视频中不同时间点的检测画面；其中可同时看到 mouse、phone、laptop 和 cup 的检测框。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.93\textwidth]{jetson_demo_montage.jpg}
+\caption{Jetson 演示视频抽帧（原视频：\code{results/videos/jetson\_demo.mp4}）}
+\end{figure}
+
+\section{ROS2 发布与运行说明}
+检测节点订阅 \code{/camera/image\_raw}，推理后发布 \code{/detections}（\code{vision\_msgs/Detection2DArray}）。程序、启动方式、参数和验证命令写入 \code{docs/ros2\_quickstart.md}。需要现场检查时可运行：
+\begin{summarybox}
+\code{ros2 topic echo /detections --once}
+\end{summarybox}
+
+\section{典型错误与改进方向}
+错误案例已保存于 \code{results/independent\_test\_80/errors/} 和
+\code{results/evaluation\_final/errors/}。失败主要与小目标、运动模糊、遮挡和低置信度有关。后续可补充困难样本、提高输入尺寸、增加数据增强，并使用 TensorRT 优化部署速度。
+
+\section{GitHub 提交记录与材料追踪}
+按照课程要求，报告、数据、代码、模型和结果均上传至个人 GitHub，并保留分阶段 commit 记录，未采用一次性全量提交。仓库链接为：
+\href{https://github.com/9161942-boop/robotics-experiment-1}{\url{https://github.com/9161942-boop/robotics-experiment-1}}。
+
+\begin{table}[H]
+\centering
+\caption{代表性分阶段提交}
+\begin{tabularx}{\textwidth}{>{\bfseries\color{OUCblue}}l l X}
+\toprule
+阶段 & Commit & 内容\\
+\midrule
+数据准备 & \code{5fcd148} & 鼠标样本与标注计划\\
+数据准备 & \code{c2507b4} & cup/laptop/phone 数据补充\\
+训练管线 & \code{3e007d8} & 四类 YOLO 训练流程\\
+独立测试 & \code{a93ffb5} & 独立图片筛查记录\\
+Jetson 部署 & \code{14a710c} & 实时检测演示视频\\
+验收整理 & \code{d887607} & 验收材料与 PDF 报告\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{github_commit_history.png}
+\caption{GitHub main 分支提交记录截图（页面访问时间：2026-09-03）}
+\end{figure}
+
+\section{提交材料清单}
+\begin{itemize}
+\item 数据集：\code{dataset/images/}、\code{dataset/yolo/}，另附 80 张独立测试照片；
+\item 模型：\code{weights/best.pt}（四类输出）；
+\item 程序：\code{src/}、\code{scripts/}；
+\item 结果视频：\code{results/videos/jetson\_demo.mp4}；
+\item 运行说明：\code{README.md}、\code{docs/ros2\_quickstart.md}；
+\item 结果与错误案例：\code{results/independent\_test\_80/}、\code{results/evaluation\_final/}；
+\item 报告源文件与 PDF：\code{report/experiment\_report.tex}、\code{report/experiment\_report.pdf}。
+\end{itemize}
+
+\section{结论}
+本实验完成了从数据采集、标注、YOLOv8 训练到 Jetson 实时检测和 ROS2 发布的完整链路。四类独立实物照片准确率为 90\%，Jetson 视频显示约 15 FPS，达到本实验的主要验收指标。所有材料已按目录整理，并通过 GitHub 分阶段 commit 留存。
+
+\end{document}
