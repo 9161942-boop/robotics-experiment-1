@@ -12,6 +12,7 @@
 - `training/yolov8n_4class_finetune/`：训练参数、曲线和混淆矩阵
 - `results/yolov8n_4class_finetune_test/`：帧级诊断结果和典型错误
 - `results/yolov8n_dataset_yolo_scratch.md`：仅使用 `dataset/yolo/` 从零训练的 YOLOv8n 结果
+- `results/yolov8n_coco_to_4class_finetune.md`：将 COCO 模型转换为四类模型的训练结果
 - `jetson_setup/`、`docs/`：Jetson 上传脚本和运行说明
 - `report/`：中英文 LaTeX 实验报告、PDF 和证据分析
 
