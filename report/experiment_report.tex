@@ -1,12 +1,13 @@
 \documentclass[UTF8,a4paper,12pt]{ctexart}
 \usepackage{geometry}
 \geometry{left=2.0cm,right=2.0cm,top=1.8cm,bottom=1.8cm}
-\usepackage{xcolor}
-\definecolor{OUCblue}{HTML}{164A7B}
-\definecolor{OUCcyan}{HTML}{1D9AAA}
-\definecolor{OUClight}{HTML}{EAF4F7}
-\definecolor{OUCgold}{HTML}{E4A11B}
-\definecolor{OUCgray}{HTML}{5B6573}
+\usepackage[table]{xcolor}
+% A restrained paper-style palette: ink, teal accent, warm evidence highlight.
+\definecolor{OUCblue}{HTML}{20354A}
+\definecolor{OUCcyan}{HTML}{2A7F78}
+\definecolor{OUClight}{HTML}{F1F7F6}
+\definecolor{OUCgold}{HTML}{C58A2A}
+\definecolor{OUCgray}{HTML}{667085}
 \usepackage{graphicx}
 \graphicspath{{./}{../results/training/}}
 \usepackage{booktabs}
@@ -14,7 +15,7 @@
 \usepackage{array}
 \usepackage{float}
 \usepackage{caption}
-\captionsetup{font=small,labelfont={bf,color=OUCblue},labelsep=period}
+\captionsetup{font={small},labelfont={bf,color=OUCcyan},labelsep=period,justification=centering}
 \usepackage{enumitem}
 \setlist[itemize]{leftmargin=1.4em,itemsep=0.2em,topsep=0.2em}
 \usepackage{tcolorbox}
@@ -24,6 +25,7 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=OUCblue,urlcolor=OUCcyan,citecolor=OUCblue}
 \usepackage{microtype}
+\usepackage{tocloft}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
 \setlength{\headheight}{25pt}
@@ -31,12 +33,17 @@
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0.35em}
 \renewcommand{\arraystretch}{1.25}
+\rowcolors{2}{OUClight!45}{white}
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{1}
 \ctexset{
   section = {format=\Large\bfseries\color{OUCblue},beforeskip=1.2em,afterskip=0.5em},
   subsection = {format=\large\bfseries\color{OUCcyan},beforeskip=0.8em,afterskip=0.3em}
 }
+\renewcommand{\cftsecfont}{\bfseries\color{OUCblue}}
+\renewcommand{\cftsecpagefont}{\color{OUCgray}}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftbeforesecskip}{0.35em}
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\color{OUCblue}\small 机器人学集成小组项目\quad 实验一}
@@ -65,10 +72,12 @@
 \textcolor{OUCcyan}{\rule{0.72\textwidth}{1.2pt}}\\[-0.1em]
 {\small\color{OUCgray}计算机科学与技术学院\quad 机器人学集成小组项目}
 \end{flushright}
-\vspace{1.1cm}
-{\color{OUCblue}\Huge\bfseries 实验一}\\[0.35cm]
-{\color{OUCcyan}\LARGE\bfseries 目标检测与识别}\\[1.2cm]
-{\color{OUCgray}\Large 基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}
+\vspace{0.9cm}
+\begin{tcolorbox}[enhanced,colback=OUCblue,colframe=OUCblue,boxrule=0pt,arc=0mm,left=8mm,right=8mm,top=7mm,bottom=7mm]
+{\color{white}\Huge\bfseries 实验一}\\[0.35cm]
+{\color{OUCgold!90!white}\LARGE\bfseries 目标检测与识别}\\[0.45cm]
+{\color{white!85}\large 基于 YOLOv8 与 Jetson 的四类桌面物体检测系统}
+\end{tcolorbox}
 \vfill
 \begin{summarybox}
 \textbf{验收摘要}\\[0.3em]
