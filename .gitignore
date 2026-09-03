@@ -33,6 +33,15 @@ results/test_evaluation_clean/errors/
 results/v2_test_evaluation/errors/
 results/coco_external_test/
 
+# Independent test inputs and annotated failures stay local; keep only the
+# traceable phone manifest and selected CSV/JSON summaries in Git.
+dataset/varify/*/*.jpg
+dataset/varify/*/*.jpeg
+dataset/varify/*/*.png
+dataset/varify/*/*.webp
+results/independent_test_runtime*/errors/
+results/independent_test_runtime_conf*/
+
 # Track only the selected deployment checkpoint; keep other generated weights ignored.
 !weights/
 weights/*
