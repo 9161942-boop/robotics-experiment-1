@@ -2,7 +2,7 @@
 
 ## 模型配置核对
 
-- 模型：`runs/yolov8n_coco_to_4class_finetune/weights/4class_best.pt`
+- 模型：`weights/best.pt`（由 `runs/yolov8n_coco_to_4class_finetune/weights/4class_best.pt` 整理而来）
 - 输出类别：`mouse`、`laptop`、`cup`、`phone`
 - `nc=4`
 - 参数量：3,133,436

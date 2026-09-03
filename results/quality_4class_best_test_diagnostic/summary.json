@@ -1,0 +1,42 @@
+{
+  "weights": "D:\\matlab\\机器人学集成小组项目\\实验一\\runs\\yolov8n_coco_to_4class_finetune\\weights\\4class_best.pt",
+  "images": 87,
+  "ground_truth_objects": 104,
+  "predicted_objects": 75,
+  "correct_objects": 52,
+  "object_accuracy_percent": 50.0,
+  "precision_percent": 69.33333333333333,
+  "recall_percent": 50.0,
+  "false_negative": 52,
+  "false_positive": 23,
+  "confidence_threshold": 0.25,
+  "match_iou_threshold": 0.5,
+  "nms_iou_threshold": 0.7,
+  "per_class": {
+    "cup": {
+      "gt": 42,
+      "false_negative": 34,
+      "correct": 8,
+      "false_positive": 11
+    },
+    "laptop": {
+      "gt": 17,
+      "false_negative": 4,
+      "correct": 13,
+      "false_positive": 3
+    },
+    "mouse": {
+      "gt": 28,
+      "correct": 26,
+      "false_positive": 6,
+      "false_negative": 2
+    },
+    "phone": {
+      "false_positive": 3,
+      "gt": 17,
+      "correct": 5,
+      "false_negative": 12
+    }
+  },
+  "acceptance_note": "Use at least 20 independently collected objects for the final course accuracy; this split is a frame-level diagnostic."
+}
