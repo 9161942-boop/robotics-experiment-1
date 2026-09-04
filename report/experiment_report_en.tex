@@ -13,6 +13,7 @@
 \definecolor{Ink}{HTML}{1F2937}
 \definecolor{Accent}{HTML}{1F4E79}
 \definecolor{AccentLight}{HTML}{F3F6FA}
+\definecolor{Accent2}{HTML}{2A9D8F}
 \usepackage{url}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=Accent,urlcolor=Accent}
@@ -76,15 +77,15 @@ The experiment follows the sequence “collect—screen—annotate—convert—t
 \begin{figure}[H]
 \centering
 \resizebox{\columnwidth}{!}{%
-\begin{tikzpicture}[node distance=0.35cm, every node/.style={font=\scriptsize}, flow/.style={draw=Accent, rounded corners=2pt, fill=AccentLight, minimum width=1.55cm, minimum height=0.42cm, align=center}, arrow/.style={-latex, draw=Accent}]
-\node[flow] (a) {1. Collect\\and screen};
-\node[flow,right=0.28cm of a] (b) {2. ISAT\\annotation};
-\node[flow,right=0.28cm of b] (c) {3. YOLO\\conversion};
-\node[flow,right=0.28cm of c] (d) {4. YOLOv8\\training};
-\node[flow,below=0.42cm of d] (e) {5. Validate\\and diagnose};
-\node[flow,left=0.28cm of e] (f) {6. Independent\\physical test};
-\node[flow,left=0.28cm of f] (g) {7. Jetson\\deployment};
-\node[flow,left=0.28cm of g] (h) {8. ROS2\\publication};
+\begin{tikzpicture}[node distance=0.32cm, every node/.style={font=\scriptsize}, flow/.style={draw=Accent, line width=0.65pt, rounded corners=2.5pt, fill=AccentLight!75, text=Ink, minimum width=1.55cm, minimum height=0.48cm, align=center}, flowB/.style={flow, draw=Accent2, fill=Accent2!12}, arrow/.style={-Latex, line width=0.75pt, draw=Accent2}]
+\node[flow] (a) {\textcolor{Accent}{\textbf{1}}\\Collect and screen};
+\node[flow,right=0.26cm of a] (b) {\textcolor{Accent}{\textbf{2}}\\ISAT annotation};
+\node[flow,right=0.26cm of b] (c) {\textcolor{Accent}{\textbf{3}}\\YOLO conversion};
+\node[flow,right=0.26cm of c] (d) {\textcolor{Accent}{\textbf{4}}\\YOLOv8 training};
+\node[flowB,below=0.44cm of d] (e) {\textcolor{Accent2}{\textbf{5}}\\Validate and diagnose};
+\node[flowB,left=0.26cm of e] (f) {\textcolor{Accent2}{\textbf{6}}\\Independent test};
+\node[flowB,left=0.26cm of f] (g) {\textcolor{Accent2}{\textbf{7}}\\Jetson deployment};
+\node[flowB,left=0.26cm of g] (h) {\textcolor{Accent2}{\textbf{8}}\\ROS2 publication};
 \draw[arrow] (a)--(b)--(c)--(d);
 \draw[arrow] (d)--(e)--(f)--(g)--(h);
 \end{tikzpicture}}
@@ -122,13 +123,22 @@ Annotation quality was checked at three levels. First, each box was inspected to
 \end{figure}
 
 \section{Training Configuration}
-The model was trained from \code{yolov8n.yaml} with random initialization. The training process did not load \code{yolov8n.pt}, COCO weights, or another external checkpoint. This choice makes the relation between the self-built dataset and the final four-class weights explicit. The training command was:
-
-\begin{quote}\small\code{python train\_yolo.py --epochs 100 --batch 16 --device 0 --workers 0}\end{quote}
+The model was trained from \code{yolov8n.yaml} with random initialization. The training process did not load \code{yolov8n.pt}, COCO weights, or another external checkpoint. This choice makes the relation between the self-built dataset and the final four-class weights explicit. The main training command was \code{python train\_yolo.py --model yolov8n.yaml --data dataset/yolo/data.yaml --epochs 100 --imgsz 640 --batch 16 --device 0 --workers 0}; the full command record is given below.
 
 Training used 100 epochs, 640-pixel input images, batch size 16, GPU device 0, zero data-loader workers, seed 42, automatic optimizer selection, standard YOLO augmentation, and early-stopping patience of 25. Only the training and validation splits were used for parameter optimization. The diagnostic test split was retained until training finished, so it was not used to choose the checkpoint.
 
 The training directory preserves the argument file, loss and metric curves, confusion matrices, and the final weight. The curves are used to inspect convergence and late-stage stability, while the confusion matrix shows whether a class is systematically confused with another class. Keeping both forms of evidence is more informative than reporting only one final scalar.
+
+\subsection{Command-level operation record}
+The following commands record what was executed at each important stage and what each command produced:
+\begin{enumerate}
+\item \textbf{Convert annotations.} Run \code{python convert\_isat\_to\_yolo.py --images-root dataset/images --output-root dataset/yolo --classes mouse,laptop,cup,phone}. The script reads ISAT JSON files, recomputes boxes from polygons, performs coordinate checks, assigns the temporal train/validation/test split, and writes \code{data.yaml}, image files, label files, a manifest, and \code{conversion\_summary.json}.
+\item \textbf{Train from scratch.} Run \code{python train\_yolo.py --model yolov8n.yaml --data dataset/yolo/data.yaml --epochs 100 --imgsz 640 --batch 16 --device 0 --workers 0}. The YAML model definition creates a randomly initialized network; the run directory records the training configuration, curves, confusion matrix, and \code{weights/best.pt}.
+\item \textbf{Diagnose annotated images.} Run \code{python evaluate\_yolo.py --weights models/best.pt --images dataset/yolo/images/test --labels dataset/yolo/labels/test --output results/evaluation\_final --confidence 0.25 --match-iou 0.50 --device 0}. This produces \code{summary.json}, \code{per\_image.csv}, and visualized error cases without changing the weights.
+\item \textbf{Run real-time detection.} On Jetson, run \code{python realtime\_detect.py --weights models/best.pt --source 0 --imgsz 320 --confidence 0.35 --device 0 --output results/videos/demo.mp4}. The program opens the USB camera, performs inference, draws boxes and confidence scores, calculates a sliding FPS, and saves an annotated video when requested.
+\item \textbf{Publish through ROS2.} Start \code{python ros2\_detector\_node.py --weights models/best.pt --image-topic /camera/image\_raw --output-topic /detections --device 0}, then inspect one message with \code{ros2 topic echo /detections --once}. The node converts \code{sensor\_msgs/Image} using \code{cv\_bridge} and publishes \code{vision\_msgs/Detection2DArray}.
+\end{enumerate}
+These commands separate data generation, parameter optimization, offline diagnosis, edge-device inference, and inter-node communication. That separation is useful during acceptance because a failure in one stage can be located from its output directory instead of being confused with a model-quality problem.
 
 \begin{figure}[H]
 \centering
@@ -248,6 +258,26 @@ ROS2 publication & \code{/detections} publisher and startup instructions & Imple
 \end{tabularx}
 \end{table}
 
+\subsection{Evidence traceability}
+Each acceptance statement is supported by a concrete file rather than by a screenshot alone. The dataset split can be checked in \code{dataset/yolo/data.yaml} and \code{conversion\_summary.json}; the training choice and hyperparameters are recorded in the run configuration; the independent accuracy is summarized in \code{results/independent\_test\_80/summary.json}; and the eight failed photographs are retained in the corresponding \code{errors/} directory. The video, program, and ROS2 documentation then connect these offline records to the edge-device demonstration.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Operation, program, and saved evidence}
+\begin{tabularx}{\columnwidth}{>{\bfseries}p{0.17\columnwidth} >{\raggedright\arraybackslash}p{0.30\columnwidth} >{\raggedright\arraybackslash}X}
+\toprule
+Stage & Main program or command & Saved evidence\\
+\midrule
+Conversion & \path{convert_isat_to_yolo.py} & YOLO images, labels, \code{data.yaml}, manifest\\
+Training & \path{train_yolo.py} & Arguments, curves, confusion matrix, \code{best.pt}\\
+Diagnosis & \path{evaluate_yolo.py} & Summary JSON, per-image CSV, error images\\
+Deployment & \path{realtime_detect.py} & Annotated video and displayed FPS\\
+Interface & \path{ros2_detector_node.py} & \code{/detections} topic instructions\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \section*{Summary and Reflections}
 This experiment completed a traceable path from self-collected images to an edge-device detection system. The main summary and reflections are:
 \begin{itemize}
@@ -258,6 +288,11 @@ This experiment completed a traceable path from self-collected images to an edge
 \end{itemize}
 
 The practical value of this experiment is the complete engineering chain: data are traceable to labels, labels are traceable to weights, weights are traceable to a running program, and the program is traceable to saved videos and ROS2 messages. This organization makes the system easier to demonstrate, reproduce, and improve than a detector accompanied only by a single accuracy number.
+
+\subsection*{Practical reflection}
+The experiment also clarified why different measurements must be kept separate. The validation set uses manually annotated boxes and IoU matching, so its Precision, Recall, and mAP describe localization and classification quality under a fixed protocol. The independent photographs use a simple image-level pass rule, so their 90\% result answers a different question: whether a new physical object is recognized well enough for the course demonstration. Reporting both values prevents a high score on correlated video frames from being mistaken for real-world object accuracy.
+
+From an implementation perspective, the most useful practice was recording the output of every stage. A conversion error appears in the label or manifest checks, a training error appears in the run directory, a visual failure appears in the per-image CSV and error folder, and a deployment problem appears in the video or ROS2 topic. This division makes debugging more direct and gives the next experiment a clear starting point. The final system is therefore both an accepted prototype and a reproducible baseline for adding difficult samples and optimizing Jetson inference.
 
 \flushend
 \end{document}
