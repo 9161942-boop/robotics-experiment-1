@@ -338,7 +338,7 @@ ROS2 发布识别结果 & 节点发布 \code{/detections}，启动与 \code{ros2
 \end{table}
 
 \section*{总结与感悟}
-本实验完成了从数据采集、人工标注、格式转换、YOLOv8 训练到 Jetson 实时检测和 ROS2 结果发布的完整操作链路。结论分为以下四点：
+本实验完成了从数据采集、人工标注、格式转换、YOLOv8 训练到 Jetson 实时检测和 ROS2 结果发布的完整操作链路。本次实验的总结与感悟如下，主要体现在四个方面：
 
 \begin{itemize}[leftmargin=1.4em,itemsep=0.35em,topsep=0.2em]
 \item \textbf{数据与训练：}实验使用自行采集并人工标注的 595 张图像，划分为 421 张训练图像、87 张验证图像和 87 张测试图像。模型从 \code{yolov8n.yaml} 随机初始化开始训练，未加载 COCO 或其他外部预训练权重；训练参数、曲线、混淆矩阵和最终权重均已保存。
