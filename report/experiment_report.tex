@@ -23,6 +23,7 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=Accent,urlcolor=Accent}
 \usepackage{microtype}
+\usepackage{fancyhdr}
 \usepackage{placeins}
 \usepackage{flushend}
 \usepackage{enumitem}
@@ -37,6 +38,22 @@
 \renewcommand{\arraystretch}{1.12}
 \renewcommand{\figurename}{图}
 \renewcommand{\tablename}{表}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize 实验一：目标检测与识别}
+\fancyhead[R]{\footnotesize 机器人学集成小组项目}
+\fancyfoot[C]{\footnotesize 第\ \thepage\ 页}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[L]{\footnotesize 实验一：目标检测与识别}
+  \fancyhead[R]{\footnotesize 机器人学集成小组项目}
+  \fancyfoot[C]{\footnotesize 第\ \thepage\ 页}
+  \renewcommand{\headrulewidth}{0.3pt}
+  \renewcommand{\footrulewidth}{0.3pt}
+}
 \begin{document}
 
 \title{实验一：目标检测与识别实验报告}
@@ -44,6 +61,7 @@
 \IEEEauthorblockA{中国海洋大学计算机科学与技术学院\\
 个人 GitHub：\url{https://github.com/9161942-boop/robotics-experiment-1}}}
 \maketitle
+\thispagestyle{fancy}
 
 \begin{abstract}
 桌面场景中的目标检测看似简单，但物体尺寸、拍摄角度、遮挡和背景变化会直接影响识别结果。本实验以 mouse、laptop、cup 和 phone 四类桌面物体为对象，按照“数据采集—人工标注—格式转换—模型训练—独立测试—边缘部署”的完整流程完成目标检测实验。训练过程只使用本实验自行采集和人工标注的数据，从 \code{yolov8n.yaml} 随机初始化开始，未加载 COCO 或其他外部预训练权重。
