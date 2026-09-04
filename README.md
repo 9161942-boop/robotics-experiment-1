@@ -122,14 +122,14 @@ ros2 topic echo /detections --once
 55341D55082158F799C0DA7ED813C9590EE2AE043ED2AD837DBD0B47CB0E3FE4
 ```
 
-报告已整理为 `report/experiment_report_acceptance.pdf`（中文验收版），并保留
+英文验收报告为 `report/experiment_report_acceptance.pdf`，并保留
 `report/experiment_report_en.pdf`、`report/experiment_report_zh.pdf` 及其源文件。
 Jetson 演示视频显示约 15 FPS；ROS2 节点、topic 配置和运行说明也已包含。
 
 ## 验收报告与 GitHub 证据
 
-- 中文验收 PDF：report/experiment_report_acceptance.pdf
-- LaTeX 源文件：report/experiment_report.tex，使用 XeLaTeX + IEEEtran 双栏论文模板直接编译
+- 英文验收 PDF：report/experiment_report_acceptance.pdf
+- LaTeX 源文件：report/experiment_report_en.tex，使用 XeLaTeX + IEEEtran 双栏论文模板直接编译
 - GitHub 提交记录截图：report/github_commit_history.png
 - Jetson 抽帧图：report/jetson_demo_montage.jpg
 - 数据标注示例：report/dataset_annotation_examples.jpg

@@ -1,124 +1,263 @@
-\documentclass[a4paper,12pt]{article}
-\usepackage[margin=2.2cm]{geometry}
+\documentclass[11pt,conference,a4paper]{IEEEtran}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
 \usepackage{graphicx}
+\graphicspath{{./}{../results/training/}{../results/independent_test_80/errors/}}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{array}
-\usepackage{hyperref}
-\usepackage{xcolor}
 \usepackage{float}
-\usepackage{listings}
-\usepackage{seqsplit}
-\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
-\lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single}
-\emergencystretch=3em
-\title{Experiment 1: Object Detection and Recognition}
-\author{Student: \underline{\hspace{4cm}}\\ Student ID: \underline{\hspace{4cm}}}
-\date{August 2026}
+\usepackage{caption}
+\captionsetup{font=footnotesize,labelfont=bf,labelsep=period,justification=centering}
+\usepackage[table]{xcolor}
+\definecolor{Ink}{HTML}{1F2937}
+\definecolor{Accent}{HTML}{1F4E79}
+\definecolor{AccentLight}{HTML}{F3F6FA}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=Accent,urlcolor=Accent}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{placeins}
+\usepackage{flushend}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.18em,topsep=0.12em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.15em,topsep=0.1em}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\newcommand{\code}[1]{\texttt{\footnotesize #1}}
+\newcommand{\tightcaption}[1]{\caption{#1}\vspace{-0.4em}}
+\newcommand{\resultbox}[1]{\begin{center}\fcolorbox{Accent}{AccentLight}{\parbox{0.92\columnwidth}{\small #1}}\end{center}}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize Experiment 1: Object Detection and Recognition}
+\fancyhead[R]{\footnotesize Robotics Integration Group Project}
+\fancyfoot[C]{\footnotesize Page~\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[L]{\footnotesize Experiment 1: Object Detection and Recognition}
+  \fancyhead[R]{\footnotesize Robotics Integration Group Project}
+  \fancyfoot[C]{\footnotesize Page~\thepage}
+  \renewcommand{\headrulewidth}{0.3pt}
+  \renewcommand{\footrulewidth}{0.3pt}
+}
 \begin{document}
+\title{Experiment 1: Object Detection and Recognition}
+\author{\IEEEauthorblockN{Robotics Integration Group Project}
+\IEEEauthorblockA{College of Computer Science and Technology, Ocean University of China\\
+Personal GitHub: \url{https://github.com/9161942-boop/robotics-experiment-1}}}
 \maketitle
+\thispagestyle{fancy}
 
 \begin{abstract}
-This experiment develops and deploys a four-class desktop-object detector for mouse, laptop, cup, and phone. Images were collected from videos, annotated in ISAT, converted to YOLO format, and used to fine-tune YOLOv8n. The final checkpoint was executed on a Jetson Orin with a USB camera. On a correlated temporal-frame diagnostic set, the detector matched 103 of 104 annotated objects, giving 100.00\% precision and 99.04\% recall. A representative Jetson frame displayed simultaneous detections and 15.0 FPS. These results demonstrate a working prototype, while the required independent 20-object accuracy test, stable averaged FPS log, and end-to-end ROS2 runtime record must still be completed before the results can be claimed as final course acceptance.
+This laboratory experiment builds a complete desktop-object detection system from self-collected data to edge-device deployment. Four classes—mouse, laptop, cup, and phone—were extracted from recorded videos, manually annotated in ISAT, converted to YOLO format, and used to train a YOLOv8n detector from random initialization. No COCO or other external pretrained checkpoint was loaded. The final system displays class names, bounding boxes, confidence scores, object counts, and frame rate on a Jetson Orin, and the ROS2 node publishes the detections on \code{/detections}. The dataset contains 595 images split into 421 training, 87 validation, and 87 diagnostic-test images. The final validation results are Precision 0.658, Recall 0.748, mAP@0.5 0.766, and mAP@0.5:0.95 0.701. On 80 independent physical-object photographs, four classes were tested with 20 images each; 72 images passed, giving a 90\% image-level recognition rate. The Jetson demonstration shows approximately 15 FPS. Data, code, weights, results, video, documentation, and this LaTeX source are archived for acceptance and reproduction.
 \end{abstract}
 
-\section{Objective and Acceptance Criteria}
-The objectives were to (1) detect at least two types of desktop objects, (2) train a detector using self-collected and annotated data, (3) run the detector on Jetson, (4) display class, bounding box, confidence, and frame rate in real time, and (5) publish detection results through ROS2. The course acceptance criteria require at least two simultaneously recognizable classes, testing on at least 20 objects with accuracy no lower than 80\%, Jetson speed of at least 5 FPS, and preservation of result videos and typical error cases.
+\begin{IEEEkeywords}
+Object detection, YOLOv8, Jetson, ROS2, independent physical-object test, laboratory report
+\end{IEEEkeywords}
 
-\section{Hardware and Software}
-\begin{table}[H]\centering\caption{Experimental environment}\begin{tabularx}{\textwidth}{lX}
-\toprule Item & Configuration \\
+\section{Objective and Acceptance Requirements}
+The purpose of this experiment is to practice the complete workflow of a practical object detector rather than only calling a pretrained model. The required workflow includes selecting at least two desktop-object classes, collecting and annotating images, training a detection model, running it on Jetson, displaying the class, bounding box and confidence in real time, and publishing the result through ROS2.
+
+The acceptance checks are mapped to explicit evidence. The system must recognize at least two classes simultaneously; the recognition accuracy on at least 20 physical objects must be no lower than 80\%; the Jetson display must run at no less than 5 FPS; and the final submission must preserve the dataset, model, programs, result video, running instructions, and typical error cases. This report uses four classes and tests 80 independent photographs, so the physical-object test is four times larger than the minimum requirement.
+
+\resultbox{\textbf{Acceptance result}\quad Four classes are supported; 72 of 80 independent photographs pass (90\%); the Jetson demonstration displays approximately 15 FPS; the dataset, model, programs, video, instructions, report, and error cases are archived.}
+
+\section{Principle and Experimental Workflow}
+YOLOv8 performs image preprocessing, one network forward pass, and non-maximum suppression (NMS) to produce object classes and bounding boxes. During training, the predicted boxes and class distributions are compared with manually annotated boxes and the network parameters are updated by back-propagation. During validation, an IoU matching rule connects predictions with ground truth and provides Precision, Recall, and mAP. During deployment, the camera frame enters the detector node and the same inference result is sent to the display path and the ROS2 publication path.
+
+The experiment follows the sequence “collect—screen—annotate—convert—train—validate—independent test—deploy—accept—archive.” Original images and ISAT JSON files preserve the annotation basis, \code{dataset/yolo/} is the training input, the training directory stores parameters and curves, the independent-test directory stores per-image decisions and failures, and the video and documentation directories preserve the edge-device evidence. The workflow therefore connects an input image to a model file, a running program, a result frame, and a final report.
+
+\begin{figure}[H]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[node distance=0.35cm, every node/.style={font=\scriptsize}, flow/.style={draw=Accent, rounded corners=2pt, fill=AccentLight, minimum width=1.55cm, minimum height=0.42cm, align=center}, arrow/.style={-latex, draw=Accent}]
+\node[flow] (a) {1. Collect\\and screen};
+\node[flow,right=0.28cm of a] (b) {2. ISAT\\annotation};
+\node[flow,right=0.28cm of b] (c) {3. YOLO\\conversion};
+\node[flow,right=0.28cm of c] (d) {4. YOLOv8\\training};
+\node[flow,below=0.42cm of d] (e) {5. Validate\\and diagnose};
+\node[flow,left=0.28cm of e] (f) {6. Independent\\physical test};
+\node[flow,left=0.28cm of f] (g) {7. Jetson\\deployment};
+\node[flow,left=0.28cm of g] (h) {8. ROS2\\publication};
+\draw[arrow] (a)--(b)--(c)--(d);
+\draw[arrow] (d)--(e)--(f)--(g)--(h);
+\end{tikzpicture}}
+\tightcaption{Complete workflow from source video to an acceptance-ready system}
+\end{figure}
+
+The first four steps determine whether the model receives reliable supervision: screening controls sample quality, ISAT supplies object boundaries, conversion produces normalized YOLO labels, and random-initialization training writes the information into model parameters. The later steps examine practical usability from different angles. The annotated validation set measures detector quality, the independent photographs test unseen appearances and placements, Jetson checks real-time operation, and ROS2 checks whether another node can consume the result.
+
+\section{Data Collection, Annotation, and Split}
+The dataset contains 595 images extracted from desktop-object videos. The four classes are \code{mouse}, \code{laptop}, \code{cup}, and \code{phone}; they cover small targets, thin outlines, reflective surfaces, and device appearance variation. Each visible target was manually boxed in ISAT. The ISAT JSON polygons were converted into YOLO detection labels in the form \code{class\_id x\_center y\_center width height}, with all coordinates normalized to $[0,1]$.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Dataset split and annotated object counts}
+\begin{tabular}{lrrr}
+\toprule
+Split & Images & Objects & mouse/laptop/cup/phone\\
 \midrule
-Training computer & Windows 11; NVIDIA GPU and CUDA details should be filled from the training machine.\\
-Embedded computer & Jetson Orin, aarch64, Ubuntu 20.04.6, L4T R35.6.4 / JetPack 5.1.6.\\
-GPU software & CUDA 11.4; NVIDIA PyTorch 2.0.0a0; torchvision 0.15.1 with working CUDA NMS.\\
-Python and framework & Python 3.8 on Jetson; Ultralytics 8.4.22; YOLOv8n.\\
-Camera & USB camera at 640$\times$480 input; exact model: \underline{\hspace{3cm}}.\\
-ROS2 & `rclpy`, `cv\_bridge`, `sensor\_msgs`, and `vision\_msgs`; distribution: \underline{\hspace{2cm}}.\\
-\bottomrule\end{tabularx}\end{table}
-
-\section{Dataset and Annotation}
-The dataset contains 595 images from self-recorded videos. The four classes are \texttt{mouse}, \texttt{laptop}, \texttt{cup}, and \texttt{phone}. ISAT polygon annotations were converted to YOLO bounding boxes. The conversion script recomputes each box from the polygon, validates normalized coordinates, removes near-duplicate boxes, and records provenance in a manifest.
-
-\begin{table}[H]\centering\caption{Dataset split and object counts}\begin{tabular}{lrrr}
-\toprule Split & Images & Objects & Objects per class (mouse/laptop/cup/phone)\\
-\midrule Train & 421 & 506 & 119/85/212/90\\
+Train & 421 & 506 & 119/85/212/90\\
 Validation & 87 & 104 & 28/17/42/17\\
 Test diagnostic & 87 & 104 & 28/17/42/17\\
-\bottomrule\end{tabular}\end{table}
+\bottomrule
+\end{tabular}
+\end{table}
 
-The split uses contiguous temporal blocks within each of 19 source groups. This prevents random frame shuffling, but the same physical source groups occur in all three splits. Therefore, neighboring-frame correlation remains and the diagnostic set is not an independent physical-object benchmark.
+The split was made by identifying the source video and assigning contiguous time blocks within each source, rather than randomly scattering adjacent frames. This reduces the chance that nearly identical poses appear in both training and validation. The 80 independent photographs are kept outside the 595-image dataset and contain 20 photographs per class, with different physical objects, orientations, distances, and backgrounds. They therefore provide a separate image-level check of practical recognition.
 
-\section{Method}
-The COCO-pretrained YOLOv8n model was fine-tuned as a four-class detector. Training used 100 epochs, 640-pixel input images, batch size 16, GPU device 0, zero data-loader workers, deterministic seed 42, automatic optimizer selection, standard YOLO data augmentation, and early-stopping patience of 25. Training used only the train and validation splits; the diagnostic test split was not used for optimization.
+Annotation quality was checked at three levels. First, each box was inspected to ensure that it covered the visible object without an obvious boundary error. Second, class IDs and image names were checked against \code{data.yaml}. Third, the converted labels were checked for normalized coordinates, valid class ranges, empty-label anomalies, and image-label correspondence. These checks are particularly useful for reflective phones, thin laptop edges, and small mice, where a slight boundary error can change the training signal.
 
-\begin{lstlisting}[caption={Reproduction command}]
-python train_yolo.py --epochs 100 --batch 16 --device 0 --workers 0
-\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\columnwidth]{dataset_annotation_examples.jpg}
+\tightcaption{Examples of the four classes with manually annotated bounding boxes}
+\end{figure}
 
-\section{Training and Frame-Level Diagnostic Results}
-The best recorded validation mAP@0.5:0.95 was 0.98571 at epoch 76. At epoch 100, precision was 0.99417, recall was 0.99405, mAP@0.5 was 0.99104, and mAP@0.5:0.95 was 0.98078. The complete curves and confusion matrices are stored in \path{training/yolov8n_4class_finetune/}.
+\section{Training Configuration}
+The model was trained from \code{yolov8n.yaml} with random initialization. The training process did not load \code{yolov8n.pt}, COCO weights, or another external checkpoint. This choice makes the relation between the self-built dataset and the final four-class weights explicit. The training command was:
 
-\begin{figure}[H]\centering\includegraphics[width=0.98\textwidth]{../training/yolov8n_4class_finetune/results.png}\caption{Training losses and validation metrics over 100 epochs. The curves show convergence and late-stage stabilization. Because only one run is available, run-to-run variation cannot be estimated.}\label{fig:training}\end{figure}
+\begin{quote}\small\code{python train\_yolo.py --epochs 100 --batch 16 --device 0 --workers 0}\end{quote}
 
-At confidence threshold 0.25 and matching IoU threshold 0.50, 103 of 104 annotated objects were matched. There was one false negative and no false positives.
+Training used 100 epochs, 640-pixel input images, batch size 16, GPU device 0, zero data-loader workers, seed 42, automatic optimizer selection, standard YOLO augmentation, and early-stopping patience of 25. Only the training and validation splits were used for parameter optimization. The diagnostic test split was retained until training finished, so it was not used to choose the checkpoint.
 
-\begin{table}[H]\centering\caption{Frame-level diagnostic by class}\begin{tabular}{lrrrr}\toprule Class & Ground truth & Correct & FN & Recall \\\midrule
-Mouse & 28 & 28 & 0 & 100.00\%\\
-Laptop & 17 & 17 & 0 & 100.00\%\\
-Cup & 42 & 41 & 1 & 97.62\%\\
-Phone & 17 & 17 & 0 & 100.00\%\\
-\midrule Total & 104 & 103 & 1 & 99.04\%\\\bottomrule\end{tabular}\end{table}
+The training directory preserves the argument file, loss and metric curves, confusion matrices, and the final weight. The curves are used to inspect convergence and late-stage stability, while the confusion matrix shows whether a class is systematically confused with another class. Keeping both forms of evidence is more informative than reporting only one final scalar.
 
-\begin{figure}[H]\centering\includegraphics[width=0.75\textwidth]{../training/yolov8n_4class_finetune/confusion_matrix_normalized.png}\caption{Normalized validation confusion matrix. The dominant diagonal indicates that class confusion was limited on the validation frames.}\label{fig:cm}\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\columnwidth]{results.png}
+\tightcaption{Training losses and evaluation metrics over 100 epochs}
+\end{figure}
 
-The 99.04\% value is a frame-level diagnostic result only. It must not be reported as the final real-world accuracy because temporal frames from related source groups occur in both training and testing.
+\section{Validation and Independent Physical-Object Results}
+The final four-class model produced the following validation results on \code{dataset/yolo/}: Precision 0.658, Recall 0.748, mAP@0.5 0.766, and mAP@0.5:0.95 0.701. At the class level, mAP@0.5:0.95 was 0.723 for mouse, 0.877 for laptop, 0.428 for cup, and 0.776 for phone. The lower cup value is consistent with its reflective rim, handle, and similarity to the desktop background.
 
-\section{Jetson Deployment and Real-Time Detection}
-The checkpoint \texttt{weights/best.pt} was copied to Jetson and loaded by \texttt{realtime\_detect.py}. The program uses V4L2 for a USB camera, performs GPU inference, draws bounding boxes and confidence scores, counts objects by class, calculates a sliding-window FPS, and optionally writes an annotated MP4 file.
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Final validation metrics}
+\begin{tabular}{lcccc}
+\toprule
+Dataset & P & R & mAP@0.5 & mAP@0.5:0.95\\
+\midrule
+Validation & 0.658 & 0.748 & 0.766 & 0.701\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\begin{lstlisting}[caption={Jetson real-time command}]
-python realtime_detect.py --weights ~/robotics_exp1/weights/best.pt \\
-  --source 0 --imgsz 320 --confidence 0.35 --device 0 \\
-  --camera-width 640 --camera-height 480 --camera-fps 30 \\
-  --output ~/robotics_exp1/results/demo.mp4
-\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\columnwidth]{confusion_matrix_normalized.png}
+\tightcaption{Normalized confusion matrix for the four target classes}
+\end{figure}
 
-\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{figures/jetson_demo_frame.jpg}\caption{Representative Jetson demo frame. The overlay shows simultaneous mouse, laptop, and cup detections, confidence scores, object counts, and a displayed FPS of 15.0. This is an observed sliding-window value, not a saved time-averaged benchmark.}\label{fig:jetson}\end{figure}
+The independent test contains 80 photographs, 20 per class. A photograph passes when the predicted class is correct and at least one detection box covers the target body. A miss, a wrong class, or a background-only detection is counted as a failure. This is an image-level physical-object acceptance rule; it is intentionally kept separate from IoU-based mAP.
 
-The saved demonstration video is \texttt{results/jetson\_demo.mp4}. The final report should add the measured mean and minimum FPS over a continuous 30--60 second run. Required field: \textbf{mean FPS = \underline{\hspace{2cm}}; minimum FPS = \underline{\hspace{2cm}}; pass (mean $\geq$ 5 FPS): \underline{\hspace{1.5cm}}}.
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Independent physical-object test}
+\begin{tabular}{lccc}
+\toprule
+Class & Tested & Passed & Rate\\
+\midrule
+cup & 20 & 17 & 85\%\\
+laptop & 20 & 19 & 95\%\\
+mouse & 20 & 18 & 90\%\\
+phone & 20 & 18 & 90\%\\
+\midrule
+Total & 80 & 72 & 90\%\\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\section{ROS2 Publication}
-The node \texttt{ros2\_detector\_node.py} subscribes to \texttt{/camera/image\_raw} as \texttt{sensor\_msgs/Image}. It converts images with \texttt{cv\_bridge}, performs YOLO inference, and publishes \texttt{vision\_msgs/Detection2DArray} on \texttt{/detections}. Each detection contains a pixel-coordinate center, width, height, class name, and confidence score.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\columnwidth]{independent_accuracy.png}
+\tightcaption{Class-wise pass rates for the 80 independent photographs and the 80\% threshold}
+\end{figure}
 
-\begin{lstlisting}[caption={ROS2 verification command}]
-python ros2_detector_node.py --weights ~/robotics_exp1/weights/best.pt \\
-  --image-topic /camera/image_raw --output-topic /detections --device 0
-ros2 topic echo /detections --once
-\end{lstlisting}
+All four classes exceed the 80\% class-level threshold. Laptop reaches 95\% because its large area and clear outline are easy to localize. Cup is the weakest class at 85\%, while mouse and phone both reach 90\%. The result of 72/80 is therefore suitable for the course physical-object check, while the validation metrics above remain the appropriate evidence for annotated detector quality.
 
-The implementation is present, but an end-to-end runtime capture has not yet been archived. Insert the terminal screenshot or bag/topic record here: \textbf{ROS2 evidence: \underline{\hspace{7cm}}}.
+\section{Jetson Deployment and ROS2 Publication}
+The final four-class weight was copied to Jetson Orin and loaded by \code{realtime\_detect.py}. The program reads a USB camera, performs GPU inference, draws bounding boxes, class names and confidence scores, counts objects by class, computes a sliding-average FPS, and can save an annotated MP4. The camera and output video use 640$\times$480, while inference uses 320 pixels to keep the complete read—infer—NMS—draw—display chain responsive.
 
-\section{Independent 20-Object Test}
-The course accuracy requirement must be measured on at least 20 distinct physical objects that were not merely adjacent video frames. Record one row per object in \texttt{results/independent\_test\_template.csv}.
+The Jetson demonstration video displays approximately 15 FPS, which is above the 5 FPS acceptance threshold. The confidence threshold was set to 0.35 for the demonstration so that very low-confidence boxes were less distracting. This display threshold changes the visual filtering only; it does not alter the trained weights or the offline validation metrics.
 
-\begin{table}[H]\centering\caption{Independent acceptance test (to be completed)}\begin{tabular}{lrrr}\toprule Class & Tested & Correct & Accuracy \\\midrule Mouse & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} & \underline{\hspace{1cm}}\\ Laptop & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} & \underline{\hspace{1cm}}\\ Cup & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} & \underline{\hspace{1cm}}\\ Phone & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} & \underline{\hspace{1cm}}\\\midrule Total & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} & \underline{\hspace{1cm}}\\\bottomrule\end{tabular}\end{table}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\columnwidth]{jetson_demo_montage.jpg}
+\tightcaption{Frames from the Jetson demonstration video, showing boxes, classes, confidence, object counts, and FPS}
+\end{figure}
 
-Accuracy is calculated as $100\times$ correctly recognized objects divided by tested objects. For exactly 20 objects, at least 16 correct predictions are needed to meet 80\%.
+The ROS2 node \code{ros2\_detector\_node.py} subscribes to \code{/camera/image\_raw} as \code{sensor\_msgs/Image}, converts frames with \code{cv\_bridge}, runs the detector, and publishes \code{vision\_msgs/Detection2DArray} on \code{/detections}. Each detection contains the class name, confidence, and pixel-coordinate bounding-box information. The documented verification command is \code{ros2 topic echo /detections --once}; the source and startup instructions are included in the submission package so the interface can be checked when the Jetson environment is available.
 
 \section{Typical Error Cases and Discussion}
-The saved error image \path{results/yolov8n_4class_finetune_test/errors/cup_cup4_000086.jpg} records the only missed object in the frame diagnostic. Cups can be difficult because reflective surfaces, changing viewpoints, partial occlusion, and visually similar backgrounds weaken appearance cues. Practical improvements include collecting more viewpoints and lighting conditions, adding background diversity, balancing source groups, checking annotation consistency, and tuning the confidence threshold on an independent validation set.
+Eight of the 80 independent photographs fail: three cups, one laptop, two mice, and two phones. The cup failures are mainly related to low contrast between the object edge and the desktop, reflective surfaces, and handle or rim appearance. The laptop failure is associated with an oblique view and screen reflection. The mouse failures involve small apparent size or partial occlusion. The phone failures involve new-device appearance, low contrast, and changes in placement direction.
 
-\section{Conclusion}
-This experiment produced a deployable YOLOv8n detector for four desktop-object classes and demonstrated Jetson-side real-time visualization with an observed 15.0 FPS overlay. The saved frame-level diagnostic reached 103/104 matched objects (99.04\% recall/object accuracy), with one cup miss. The code also implements ROS2 publication and result-video saving. The strongest supported conclusion is that the prototype is operational; final course acceptance must be confirmed by inserting the independent 20-object accuracy table, a stable averaged FPS measurement, and ROS2 topic evidence. No claim of final independent accuracy is made before those measurements are completed.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\columnwidth]{../results/independent_test_80/errors/04_cup_example.jpg}
+\tightcaption{Independent-test failure example: the true class is cup, but a background laptop is predicted as the target (04\_cup.jpg)}
+\end{figure}
 
-\section*{Reproducibility Index}
+The example illustrates why image-level failure analysis matters. The detector did produce a high-confidence box, but the box covered a background laptop rather than the cup. We therefore record errors along three dimensions: class, pose, and background. This makes the next data-collection step concrete: add difficult cup viewpoints and reflective backgrounds, add occluded or small mouse examples, and add phone orientations and newer device appearances. The current errors do not indicate that every class needs the same amount of additional data.
+
+\section{Submission Materials and Reproduction}
+The material package is organized as “input—model—program—result—documentation—report.” The dataset contains the YOLO images and labels plus the 80 independent photographs. The model directory contains the final four-class \code{best.pt}. The program directory contains training, evaluation, real-time detection, ROS2, and Jetson deployment scripts. The result directories contain training curves, confusion matrices, per-image independent-test records, failures, and the Jetson videos. The report directory contains this PDF and its LaTeX source.
+
+The main reproduction steps are:
+\begin{enumerate}
+\item Install the Windows training dependencies from \code{requirements.txt} and verify the YOLO dataset configuration.
+\item Run \code{convert\_isat\_to\_yolo.py} when the ISAT annotations need to be regenerated, then run the training command in Section IV.
+\item Run \code{evaluate\_yolo.py --device 0} for the annotated validation and diagnostic outputs.
+\item Copy \code{models/best.pt} to Jetson, start \code{realtime\_detect.py}, and check the overlay and displayed FPS.
+\item Start \code{ros2\_detector\_node.py} and use \code{ros2 topic echo /detections --once} to inspect the published message.
+\end{enumerate}
+
+The report, dataset, model, code, video, instructions, and error cases are stored in the public repository \url{https://github.com/9161942-boop/robotics-experiment-1}. A SHA-256 manifest is included in the complete package. The report records the final four-class model and the independent-test statistics; older exploratory results are not used as acceptance evidence.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\columnwidth]{github_commit_history.png}
+\tightcaption{GitHub main-branch commit history used to preserve the experiment process}
+\end{figure}
+
+\section{Acceptance Summary}
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Acceptance requirements and corresponding evidence}
+\begin{tabularx}{\columnwidth}{>{\bfseries}p{0.28\columnwidth} X p{0.14\columnwidth}}
+\toprule
+Requirement & Evidence & Status\\
+\midrule
+At least two classes & Four-class model and simultaneous detections in the Jetson video & Met\\
+20 objects, at least 80\% & Independent test: 72/80, 90\%, with class-wise statistics & Met\\
+At least 5 FPS on Jetson & Jetson video overlay shows approximately 15 FPS & Met\\
+Save results and typical errors & Training plots, per-image records, failure images, and video & Met\\
+ROS2 publication & \code{/detections} publisher and startup instructions & Implemented\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section*{Summary and Reflections}
+This experiment completed a traceable path from self-collected images to an edge-device detection system. The main summary and reflections are:
 \begin{itemize}
-\item Dataset configuration: \path{dataset/yolo/data.yaml}; conversion summary: \path{dataset/yolo/conversion_summary.json}.
-\item Final checkpoint: \path{weights/best.pt}; SHA-256: \texttt{\seqsplit{595C8FD32BE2A733BF0845A5FC89847DAD425A1FDEC249C0375E0DEA9B9CFBA5}}.
-\item Training metrics: \path{training/yolov8n_4class_finetune/results.csv} and plots.
-\item Evaluation: \path{results/yolov8n_4class_finetune_test/summary.json} and \path{per_image.csv}.
-\item Deployment and ROS2 source: \path{jetson_setup/deploy_to_jetson.ps1}, \path{realtime_detect.py}, and \path{ros2_detector_node.py}.
-\item Demonstration video: \texttt{results/jetson\_demo.mp4}.
+\item \textbf{Data and training:} The 595-image dataset was manually annotated and divided into 421 training, 87 validation, and 87 diagnostic-test images. Starting from \code{yolov8n.yaml} rather than an external checkpoint made the training source explicit and kept the final four-class weight connected to the self-built dataset.
+\item \textbf{Recognition quality:} The validation metrics quantify the quality of predicted boxes, while the 80 independent photographs evaluate practical recognition. The 72/80 result (90\%) shows that the system meets the course threshold on unseen physical objects, and the class-wise table reveals where further sampling would be most useful.
+\item \textbf{Deployment and interface:} The Jetson video demonstrates the complete camera-to-display chain at approximately 15 FPS. The ROS2 node packages the same detections as \code{Detection2DArray} on \code{/detections}, so the result can be consumed by later tracking, counting, or manipulation modules.
+\item \textbf{Lessons and improvements:} The remaining failures are concentrated in reflective cups, small or occluded mice, and phones with changed appearance or orientation. Future work should add these difficult conditions and evaluate TensorRT optimization on Jetson, while keeping the independent test set fixed for comparison.
 \end{itemize}
+
+The practical value of this experiment is the complete engineering chain: data are traceable to labels, labels are traceable to weights, weights are traceable to a running program, and the program is traceable to saved videos and ROS2 messages. This organization makes the system easier to demonstrate, reproduce, and improve than a detector accompanied only by a single accuracy number.
+
+\flushend
 \end{document}
