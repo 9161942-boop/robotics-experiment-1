@@ -134,6 +134,7 @@ The training directory preserves the argument file, loss and metric curves, conf
 \subsection{Command-level operation record}
 The following commands record what was executed at each important stage and what each command produced:
 \begin{enumerate}
+\raggedright
 \item \textbf{Convert annotations.} Run \code{python convert\_isat\_to\_yolo.py --images-root dataset/images --output-root dataset/yolo --classes mouse,laptop,cup,phone}. The script reads ISAT JSON files, recomputes boxes from polygons, performs coordinate checks, assigns the temporal train/validation/test split, and writes \code{data.yaml}, image files, label files, a manifest, and \code{conversion\_summary.json}.
 \item \textbf{Train from scratch.} Run \code{python train\_yolo.py --model yolov8n.yaml --data dataset/yolo/data.yaml --epochs 100 --imgsz 640 --batch 16 --device 0 --workers 0}. The YAML model definition creates a randomly initialized network; the run directory records the training configuration, curves, confusion matrix, and \code{weights/best.pt}.
 \item \textbf{Diagnose annotated images.} Run \code{python evaluate\_yolo.py --weights models/best.pt --images dataset/yolo/images/test --labels dataset/yolo/labels/test --output results/evaluation\_final --confidence 0.25 --match-iou 0.50 --device 0}. This produces \code{summary.json}, \code{per\_image.csv}, and visualized error cases without changing the weights.
