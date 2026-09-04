@@ -116,6 +116,8 @@ The split was made by identifying the source video and assigning contiguous time
 
 Annotation quality was checked at three levels. First, each box was inspected to ensure that it covered the visible object without an obvious boundary error. Second, class IDs and image names were checked against \code{data.yaml}. Third, the converted labels were checked for normalized coordinates, valid class ranges, empty-label anomalies, and image-label correspondence. These checks are particularly useful for reflective phones, thin laptop edges, and small mice, where a slight boundary error can change the training signal.
 
+The collection procedure also kept the data traceable. Frames were extracted from the desktop-object videos, blurred or incomplete frames were removed, and the remaining files retained their source and time order. Before annotation, the four class names were fixed as \code{mouse}, \code{laptop}, \code{cup}, and \code{phone}; this avoided later remapping of class IDs. After conversion, a small batch of images was opened together with its label file to confirm that the normalized box was drawn over the intended object. The same check was repeated for small mice, reflective cups, and phones with different orientations because these cases are most sensitive to a one-pixel or one-class labeling error.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.98\columnwidth]{dataset_annotation_examples.jpg}
@@ -170,6 +172,8 @@ Validation & 0.658 & 0.748 & 0.766 & 0.701\\
 
 The independent test contains 80 photographs, 20 per class. A photograph passes when the predicted class is correct and at least one detection box covers the target body. A miss, a wrong class, or a background-only detection is counted as a failure. This is an image-level physical-object acceptance rule; it is intentionally kept separate from IoU-based mAP.
 
+For the annotated diagnostic set, \code{evaluate\_yolo.py} used a confidence threshold of 0.25 and a matching IoU of 0.50. It saved one row per image in \code{per\_image.csv}, including the predicted class, confidence, match status, and error category. The independent-photo script then applied the simpler pass rule above and copied failed files into \code{results/independent\_test\_80/errors/}. Thus, the two evaluations answer different questions: the first checks box quality against known annotations, while the second checks whether an unseen physical object is recognized well enough for demonstration.
+
 \begin{table}[H]
 \centering
 \scriptsize
@@ -208,6 +212,8 @@ The Jetson demonstration video displays approximately 15 FPS, which is above the
 \end{figure}
 
 The ROS2 node \code{ros2\_detector\_node.py} subscribes to \code{/camera/image\_raw} as \code{sensor\_msgs/Image}, converts frames with \code{cv\_bridge}, runs the detector, and publishes \code{vision\_msgs/Detection2DArray} on \code{/detections}. Each detection contains the class name, confidence, and pixel-coordinate bounding-box information. The documented verification command is \code{ros2 topic echo /detections --once}; the source and startup instructions are included in the submission package so the interface can be checked when the Jetson environment is available.
+
+The deployment check followed a fixed sequence. First, the selected \code{best.pt} was copied to the Jetson project directory and the Python dependencies were verified. Second, the USB camera was opened and a short run was recorded with the same 320-pixel inference setting used for the demonstration. Third, the overlay was checked for class names, confidence values, boxes, object counts, and the FPS counter. Finally, the ROS2 node was started with the camera topic and the output topic shown above. This sequence separates a missing camera or topic from a detector error and leaves a video artifact for later inspection.
 
 \section{Typical Error Cases and Discussion}
 Eight of the 80 independent photographs fail: three cups, one laptop, two mice, and two phones. The cup failures are mainly related to low contrast between the object edge and the desktop, reflective surfaces, and handle or rim appearance. The laptop failure is associated with an oblique view and screen reflection. The mouse failures involve small apparent size or partial occlusion. The phone failures involve new-device appearance, low contrast, and changes in placement direction.
