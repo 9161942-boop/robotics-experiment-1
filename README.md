@@ -1,8 +1,9 @@
 # 实验一：目标检测与识别
 
-本项目使用自行采集和标注的数据，将 COCO 预训练 `yolov8n.pt` 迁移学习为
-四类桌面物体检测器，并部署到 Jetson Orin。模型类别为 `mouse`、`laptop`、
-`cup` 和 `phone`。
+本项目使用自行采集和人工标注的数据，自行训练四类桌面物体检测器并部署到
+Jetson Orin。整个最终训练链路未加载 COCO 或其他外部预训练权重：先以
+`yolov8n.yaml` 随机初始化，在自建数据集上训练，再以自训练 checkpoint 整理四类
+输出并继续训练。模型类别为 `mouse`、`laptop`、`cup` 和 `phone`。
 
 ## 项目内容
 
@@ -12,7 +13,7 @@
 - `training/yolov8n_4class_finetune/`：训练参数、曲线和混淆矩阵
 - `results/yolov8n_4class_finetune_test/`：帧级诊断结果和典型错误
 - `results/yolov8n_dataset_yolo_scratch.md`：仅使用 `dataset/yolo/` 从零训练的 YOLOv8n 结果
-- `results/yolov8n_coco_to_4class_finetune.md`：将 COCO 模型转换为四类模型的训练结果
+- `results/yolov8n_coco_to_4class_finetune.md`：基于自训练 checkpoint 整理四类输出的第二阶段记录
 - `results/quality_4class_best.md`：最终四类权重的验证与独立照片质量记录
 - `results/acceptance_materials_checklist.md`：验收材料索引和现场演示顺序
 - `jetson_setup/`、`docs/`：Jetson 上传脚本和运行说明
@@ -40,6 +41,11 @@ python convert_isat_to_yolo.py
 python train_yolo.py --epochs 100 --batch 16 --device 0 --workers 0
 ```
 
+训练过程从 `yolov8n.yaml` 的随机初始化开始，不加载 COCO 或其他外部 checkpoint。
+第一阶段在 `dataset/yolo/data.yaml` 上训练得到内部权重；第二阶段以该内部权重为起点，
+将检测头整理为四类输出后继续训练，最终验收权重为 `weights/best.pt`。因此报告中的
+“从零训练”指整个训练链路没有使用外部预训练参数，而不是跳过四类输出整理步骤。
+
 训练仅使用 train/val，不使用 test。当前划分为 train 421、val 87、test 87；
 划分基于恢复出的 19 个实物/视频来源，每个来源都在三个集合中按时间块分配。
 
@@ -56,8 +62,8 @@ mAP@0.5:0.95 分别为 0.658、0.748、0.766 和 0.701；test 诊断结果保存
 `results/quality_4class_best_independent/`。独立照片指标采用图片级筛查标准，
 不能替代带人工框标注的 IoU/mAP。
 
-为验证转换后数据集能否直接训练，另使用 `dataset/yolo/data.yaml` 和未加载外部
-权重的 `yolov8n.yaml` 从零训练 100 轮。最佳模型在 87 张验证图像上达到
+第一阶段随机初始化模型在 `dataset/yolo/data.yaml` 上训练 100 轮，用于验证数据转换和
+训练管线。最佳模型在 87 张验证图像上达到
 mAP@0.5=0.991、mAP@0.5:0.95=0.966；标准 Ultralytics test 评估为
 mAP@0.5=0.993、mAP@0.5:0.95=0.960。在 87 张 test 图像上，帧级诊断为
 103/104 个目标匹配（精确率 98.10%，召回率 99.04%）。对 `dataset/varify/`

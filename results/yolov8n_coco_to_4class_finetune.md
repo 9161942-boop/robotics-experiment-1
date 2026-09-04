@@ -1,8 +1,9 @@
-# COCO 模型转换为四类模型
+# 自训练模型整理为四类输出的第二阶段记录
 
-以 `runs/yolov8n_dataset_yolo_scratch/weights/last.pt` 为初始化权重，将检测头从
-COCO 80 类改为 `mouse`、`laptop`、`cup`、`phone` 四类，并使用
-`dataset/yolo/data.yaml` 训练 100 轮。
+本记录的初始化权重来自本实验第一阶段的随机初始化训练结果
+`runs/yolov8n_dataset_yolo_scratch/weights/last.pt`，不是 COCO 或其他外部预训练模型。
+第二阶段将检测头整理为 `mouse`、`laptop`、`cup`、`phone` 四类，并继续使用
+`dataset/yolo/data.yaml` 训练 100 轮，得到最终验收模型。
 
 - 最佳权重：`runs/yolov8n_coco_to_4class_finetune/weights/best.pt`
 - 最后权重：`runs/yolov8n_coco_to_4class_finetune/weights/last.pt`
